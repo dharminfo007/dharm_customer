@@ -110,7 +110,7 @@
                           android:labelFor="@+id/cardProducts"
                           app:cardBackgroundColor="@color/white"
                           app:cardCornerRadius="20dp"
-                          app:cardElevation="0.5dp"
+                          app:cardElevation="2dp"
                           app:cardMaxElevation="0.5dp"
                           app:cardPreventCornerOverlap="true"
                           app:cardUseCompatPadding="true">
@@ -143,7 +143,7 @@
                           android:labelFor="@+id/cardProducts"
                           app:cardBackgroundColor="@color/white"
                           app:cardCornerRadius="20dp"
-                          app:cardElevation="1dp"
+                          app:cardElevation="2dp"
                           app:cardMaxElevation="1dp"
                           app:cardPreventCornerOverlap="true"
                           app:cardUseCompatPadding="true">
