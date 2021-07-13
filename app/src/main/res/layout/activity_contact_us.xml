@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/contact_us_page"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context=".activity.LoginActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
+        android:layout_alignParentBottom="true">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="40dp"
+            android:gravity="center"
+            android:hint="Add your feedbacks">
+
+            <EditText
+                android:id="@+id/etMoNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:maxLength="10" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_input_layout"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/black_btn_bg"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="15dp"
+            android:text="@string/txt_send"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+    <!--  <ImageView
+          android:src="@drawable/curve_shape"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" />
+
+      <ImageView
+          android:layout_marginTop="100dp"
+          android:layout_centerHorizontal="true"
+          android:layout_width="100dp"
+          android:layout_height="100dp"
+          android:src="@drawable/ic_top_logo"/>
+
+      <LinearLayout
+          android:layout_centerInParent="true"
+          android:visibility="visible"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:gravity="center">
+
+          <com.google.android.material.textview.MaterialTextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingVertical="15dp"
+              android:text="  "
+              android:textColor="@color/black"
+              android:textSize="15sp"
+              android:textStyle="normal"
+              android:layout_gravity="center"/>
+
+          <com.google.android.material.textfield.TextInputLayout
+              android:id="@+id/text_input_layout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:hint="@string/txt_add_msg"
+              android:layout_marginHorizontal="10dp"
+              android:layout_marginVertical="10dp">
+
+              <EditText
+                  android:id="@+id/etMoNo"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:inputType="textMultiLine"
+
+                  />
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+          <com.google.android.material.textview.MaterialTextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/black_btn_bg"
+              android:paddingVertical="15dp"
+              android:text="@string/txt_send"
+              android:textColor="@color/white"
+              android:textSize="20sp"
+              android:textStyle="normal"
+              android:gravity="center"
+              android:layout_gravity="center"
+              android:layout_marginHorizontal="10dp"
+              android:layout_marginVertical="10dp"/>
+
+      </LinearLayout>-->
+
+
+</FrameLayout>

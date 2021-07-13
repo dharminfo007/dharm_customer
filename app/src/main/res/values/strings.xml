@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Dharm Impex</string>
+
+    <string name="txt_add_phone">Add your phone number to get started:</string>
+    <string name="txt_login">LOGIN</string>
+    <string name="txt_send">SEND</string>
+    <string name="txt_order">ORDERS</string>
+    <string name="txt_skip">SKIP</string>
+    <string name="txt_add_mo_no">Add your mobile number</string>
+    <string name="txt_add_msg">Add your message</string>
+    <string name="txt_mo_no">Mobile number</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_more_offer">Please contact for more offers</string>
+    <string name="txt_product_cat">Our Products Catalogue</string>
+    <string name="txt_cartoon">Add Cartoon</string>
+    <string name="txt_piece">Add Piece</string>
+    <string name="txt_abt_product">Add Product :</string>
+    <string name="font_combi">combi_sanse_medium</string>
+    <string name="txt_no_data_found">No product found</string>
+</resources>

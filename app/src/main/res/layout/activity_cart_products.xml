@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.CartProductsActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_weight="0.07"
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/purple_200"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
+
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="15dp"
+                android:layout_gravity="start"
+                android:src="@drawable/ic_back"
+                app:tint="@color/white" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_top_logo"
+                android:scaleType="fitCenter"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_weight="0.71"
+        android:id="@+id/rvCartProducts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_cart_list"
+        android:visibility="visible"/>
+    <TextView
+        android:layout_weight="0.71"
+        android:id="@+id/tvNoCart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        tools:text="Cart is empty"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/black" />
+    <RelativeLayout
+        android:layout_weight="0.22"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="center"
+        >
+
+
+        <TextView
+            android:id="@+id/tvOrderTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            tools:text="Order Total "
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/tvOrderPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            tools:text="1000"
+            android:layout_alignParentRight="true"/>
+
+
+        <TextView
+            android:id="@+id/txtBuyNow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/buy_btn_bg"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Order Now"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="normal"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+</LinearLayout>

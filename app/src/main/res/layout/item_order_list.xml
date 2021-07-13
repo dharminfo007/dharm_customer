@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardProducts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="1dp"
+            app:cardMaxElevation="1dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <ImageView
+                android:id="@+id/imgProduct"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="10dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@drawable/online_shopping_bg" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvProdName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="2dp"
+            android:layout_toRightOf="@+id/cardProducts"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            tools:text="Foldable 5 Drawer 3 Layer Units Fabric Cabinet" />
+
+        <TextView
+            android:id="@+id/tvProdId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvProdName"
+            android:layout_gravity="right"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="2dp"
+            android:layout_toRightOf="@+id/cardProducts"
+            android:alpha="0.6"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            tools:text="1123" />
+
+        <LinearLayout
+            android:id="@+id/llProdQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvProdId"
+            android:layout_gravity="right"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="2dp"
+            android:layout_toRightOf="@+id/cardProducts"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                tools:text="20 " />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llProdQty"
+            android:layout_gravity="right"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="2dp"
+            android:layout_toRightOf="@+id/cardProducts"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="normal"
+                android:layout_alignParentRight="true"
+                tools:text="180 Rs." />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

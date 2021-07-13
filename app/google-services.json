@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "812767880674",
+    "project_id": "dharm-fe376",
+    "storage_bucket": "dharm-fe376.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812767880674:android:55a4b2b8cba929af9245bb",
+        "android_client_info": {
+          "package_name": "in.app.dharm.info.online.shopping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812767880674-pknnt4prq1tbqn4l29u8s66aharsp8td.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.app.dharm.info.online.shopping",
+            "certificate_hash": "a7a34b537ca3727087fd80bbf17b22c30a2a2cb9"
+          }
+        },
+        {
+          "client_id": "812767880674-g7bnjhhal9qcsnahchql989chtom4b3c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHPKQSvwnFRgAQcAN8_tJktt3PyuvnhnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812767880674-g7bnjhhal9qcsnahchql989chtom4b3c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

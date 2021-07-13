@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/cart"
+        android:title="Cart"
+        android:icon="@drawable/ic_cart"/>
+    <item
+        android:id="@+id/favorite"
+        android:title="Favorite"
+        android:icon="@drawable/ic_favorite"/>
+    <item
+        android:id="@+id/coupan"
+        android:title="Coupan"
+        android:icon="@drawable/ic_purchase_offer"/>
+</menu>

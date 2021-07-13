@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context=".activity.LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/curve_shape" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp"
+        android:src="@drawable/dharm_app_icon" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|start"
+            android:layout_marginHorizontal="10dp"
+            android:paddingVertical="15dp"
+            android:text="@string/txt_add_phone"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="normal" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/white_bg_button"
+            android:hint="@string/txt_add_mo_no"
+            app:startIconDrawable="@drawable/ic_phone">
+
+            <EditText
+                android:id="@+id/etMoNo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|center"
+                android:background="@drawable/white_bg_button"
+                android:gravity="start|center"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/black_btn_bg"
+            android:gravity="center"
+            android:paddingVertical="15dp"
+            android:text="@string/txt_login"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="normal" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvSkip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:drawableRight="@drawable/ic_next"
+            android:gravity="center"
+            android:paddingVertical="15dp"
+            android:text="@string/txt_skip"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+</RelativeLayout>

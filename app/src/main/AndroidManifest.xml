@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="in.app.dharm.info.online.shopping">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Dharm">
+        <activity android:name=".activity.MakeADealActivity"></activity>
+        <activity android:name=".activity.TermsNConditionActivity" />
+        <activity android:name=".activity.OrdersListingActivity" />
+        <activity android:name=".activity.WalletDetailActivity" />
+        <activity android:name=".activity.CartProductsActivity" />
+        <activity android:name=".activity.ImageDetailsActivity" />
+        <activity android:name=".activity.HomePageActivity" />
+        <activity android:name=".activity.ContactUsActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.ProductDetailActivity" />
+        <activity android:name=".activity.ProductListingActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
