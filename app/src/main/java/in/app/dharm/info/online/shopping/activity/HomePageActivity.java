@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -60,7 +61,7 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
     VideoView videoOnLaunch;
     CardView llContactUs;
     BottomNavigationView bottomNavigationView;
-
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,8 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         videoOnLaunch = findViewById(R.id.videoOnLaunch);
         llContactUs = findViewById(R.id.llContactUs);*/
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
+        bottomNavigationView.setItemIconTintList(null);
+        menu = bottomNavigationView.getMenu();
         /*AutoScrollPagerAdapter autoScrollPagerAdapter =
                 new AutoScrollPagerAdapter(getSupportFragmentManager());*/
         /*viewPager = findViewById(R.id.view_pager);
@@ -115,20 +117,31 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                menu.findItem(R.id.home).setIcon(R.drawable.home_unselect);
+                menu.findItem(R.id.cart).setIcon(R.drawable.cart_unselect);
+                menu.findItem(R.id.favorite).setIcon(R.drawable.fav_unselect);
+                menu.findItem(R.id.coupan).setIcon(R.drawable.coupon_unselect);
+
                 switch (item.getItemId()){
+
                     case R.id.home :
+                        item.setIcon(R.drawable.home_select);
                         setCurrentFragment(homeFragment);
                         break;
 
-                    case R.id.cart:
+                    case R.id.cart :
+                        item.setIcon(R.drawable.cart_select);
                         setCurrentFragment(cartFragment);
                         break;
 
-                    case R.id.favorite:
+                    case R.id.favorite :
+                        item.setIcon(R.drawable.fav_select);
+//                        item.setIcon(R.drawable.fav_select);
                         setCurrentFragment(favoriteFragment);
                         break;
 
-                    case R.id.coupan:
+                    case R.id.coupan :
+                        item.setIcon(R.drawable.coupon_select);
                         setCurrentFragment(cartFragment);
                         break;
                 }
