@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -54,7 +55,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private String mParam2;
     VideoView videoOnLaunch;
     View mView;
-    LinearLayout llProducts;
+    RelativeLayout llProducts;
     TextView txtProductCount;
     CardView llContactUs;
     AutoScrollViewPager viewPager;

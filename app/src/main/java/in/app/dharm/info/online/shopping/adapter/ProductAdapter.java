@@ -56,7 +56,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
 
         // Set the data to the views here
         holder.setProductTitle(product.getName());
-        holder.setProductDesc(product.getTvDesc());
+//        holder.setProductDesc(product.getTvDesc());
         holder.setProductCartoon(product.getTvPiecesPerCartoon() + " /Cartoons");
         holder.setProductStock(product.getTvStock()+" in stocks");
         holder.setProductPrice("₹ " + product.getTvPrice());
@@ -78,7 +78,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             }
         });
 
-        holder.cardProducts.setOnClickListener(new View.OnClickListener() {
+        holder.imgProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentImage = new Intent(mContext, ImageDetailsActivity.class);
@@ -96,19 +96,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
     public class ContactHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTitle, tvDesc, tvCartoon, tvStock, tvPrice;
-        CardView cardProducts;
+//        CardView cardProducts;
         ImageView imgProduct;
 
         public ContactHolder(View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDesc = itemView.findViewById(R.id.tvDesc);
+//            tvDesc = itemView.findViewById(R.id.tvDesc);
             tvCartoon = itemView.findViewById(R.id.tvCartoon);
             tvStock = itemView.findViewById(R.id.tvStock);
             tvPrice = itemView.findViewById(R.id.tvPrice);
 //            tvOfferDisc = itemView.findViewById(R.id.tvOfferDisc);
-            cardProducts = itemView.findViewById(R.id.cardProducts);
+//            cardProducts = itemView.findViewById(R.id.cardProducts);
             imgProduct = itemView.findViewById(R.id.imgProduct);
 
         }
@@ -117,9 +117,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             tvTitle.setText(title);
         }
 
-        public void setProductDesc(String desc) {
-            tvDesc.setText(desc);
-        }
+//        public void setProductDesc(String desc) {
+//            tvDesc.setText(desc);
+//        }
 
         public void setProductCartoon(String cartoon) {
             tvCartoon.setText(cartoon);

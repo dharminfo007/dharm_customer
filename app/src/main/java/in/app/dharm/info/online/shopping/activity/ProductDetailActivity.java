@@ -44,8 +44,11 @@ import java.util.Map;
 import in.app.dharm.info.online.shopping.R;
 import in.app.dharm.info.online.shopping.adapter.ProductAdapter;
 import in.app.dharm.info.online.shopping.adapter.ProductImageAdapter;
+import in.app.dharm.info.online.shopping.adapter.SlidingImageAdapter;
+import in.app.dharm.info.online.shopping.common.AutoScrollViewPager;
 import in.app.dharm.info.online.shopping.common.Common;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
+import in.app.dharm.info.online.shopping.model.BannerListPojo;
 import in.app.dharm.info.online.shopping.model.CartProductListPojo;
 import in.app.dharm.info.online.shopping.model.ImageListPojo;
 import in.app.dharm.info.online.shopping.model.OrdersListPojo;
@@ -57,6 +60,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     private ProductImageAdapter listAdapter;
     ArrayList<ImageListPojo> productImageList;
     ArrayList<OrdersListPojo> productOrderList;
+    private ArrayList<BannerListPojo> productImages;
     Spinner spinnerCartoon, spinnerUnit;
     ImageView imgCart, imgBack;
     TextView txtAddToCart, txtBuyNow;
@@ -73,6 +77,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     DatabaseReference databaseReference;
     FirebaseDatabase firebaseDatabase;
     long orderSize = 0;
+    AutoScrollViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +99,13 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         groupImages = new ArrayList<>();
         productImageList = new ArrayList<>();
         productOrderList = new ArrayList<>();
+        productImages = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("orderlist");
 //        cartProductList = dataProcessor.getArrayList("cart");
         rvProducts = findViewById(R.id.rvProductsImage);
         txtAddToCart = findViewById(R.id.txtAddToCart);
+        viewPager = findViewById(R.id.vpProductImages);
         imgCart = findViewById(R.id.imgCart);
         imgBack = findViewById(R.id.imgBack);
         txtProdName = findViewById(R.id.txtProdName);
@@ -156,11 +163,18 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                                 tvStockStatus.setText("OUT OF STOCK");
                             }
                             groupImages = (ArrayList<String>) document.get("images");
+                            productImages = (ArrayList<BannerListPojo>) document.get("images");
                             if (groupImages.size() > 0) {
                                 listAdapter = new ProductImageAdapter(groupImages, ProductDetailActivity.this);
                                 rvProducts.setAdapter(listAdapter);
                                 listAdapter.notifyDataSetChanged();
                             }
+                            if(productImages.size() > 0){
+//                                viewPager.setAdapter(new SlidingImageAdapter(ProductDetailActivity.this,
+//                                        productImages));
+                            }
+
+
                             name = document.getString("name");
                             desc = document.getString("description");
                             stock = document.getString("stock");
@@ -182,7 +196,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         imgCart.setOnClickListener(this);
         imgBack.setOnClickListener(this);
         txtAddToCart.setOnClickListener(this);
-        txtBuyNow.setOnClickListener(this);
+//        txtBuyNow.setOnClickListener(this);
     }
 
     private void initDynamicListSpinner() {
@@ -284,9 +298,9 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
 
                 break;
 
-            case R.id.txtBuyNow:
+           /* case R.id.txtBuyNow:
                 addProductForOrdering();
-                break;
+                break;*/
 
             default:
                 break;

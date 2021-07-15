@@ -2,6 +2,7 @@ package in.app.dharm.info.online.shopping.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +39,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
     private FilterAdapter filterAdapter;
     ArrayList<ProductListPojo> productArrayList;
     ArrayList<String> filterListPojoArrayList;
-    ImageView imgBack;
+//    ImageView imgBack;
     FirebaseFirestore db;
     public String TAG = "ProductListingActivity";
     ProgressDialog pd;
@@ -62,12 +63,13 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
         rvProducts = (RecyclerView) findViewById(R.id.rvProducts);
         etSearch = findViewById(R.id.etSearch);
         rvProductsFilter = (RecyclerView) findViewById(R.id.rvProductsFilter);
-        imgBack = findViewById(R.id.imgBack);
+//        imgBack = findViewById(R.id.imgBack);
         txtNoDataFound = findViewById(R.id.txtNoDataMatch);
         imgCart = findViewById(R.id.imgCart);
 
         rvProducts.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
+//        GridLayoutManager layoutManager = new GridLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         rvProducts.setLayoutManager(layoutManager);
         listAdapter = new ProductAdapter(productArrayList, this);
         rvProducts.setAdapter(listAdapter);
@@ -224,15 +226,15 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
     }
 
     private void onClickListenersInit() {
-        imgBack.setOnClickListener(this);
+//        imgBack.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.imgBack:
+            /*case R.id.imgBack:
                 onBackPressed();
-                break;
+                break;*/
             case R.id.imgCart:
                 startActivity(new Intent(ProductListingActivity.this, CartProductsActivity.class));
                 break;
