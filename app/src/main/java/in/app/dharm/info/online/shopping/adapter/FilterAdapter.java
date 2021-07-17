@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import in.app.dharm.info.online.shopping.R;
+import in.app.dharm.info.online.shopping.activity.DharmDealListingActivity;
 import in.app.dharm.info.online.shopping.activity.ProductListingActivity;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ContactHolder> {
@@ -55,6 +56,9 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ContactHol
             public void onClick(View v) {
                 if (mContext instanceof ProductListingActivity) {
                     ((ProductListingActivity)mContext).filterProductsListing(productTypeList.get(position).toString());
+                }else if(mContext instanceof DharmDealListingActivity){
+                    ((DharmDealListingActivity)mContext).filterProductsListing(productTypeList.get(position).toString());
+
                 }
             }
         });

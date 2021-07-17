@@ -11,4 +11,5 @@
     <color name="fb_start_color">#242527</color>
     <color name="fb_end_color">#3E4447</color>
     <color name="light_brown">#88DAD8D5</color>
+    <color name="brown">#DAD8D5</color>
 </resources>

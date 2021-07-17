@@ -37,6 +37,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
     <TextView
+        android:id="@+id/tvPageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -70,14 +71,52 @@
         android:textStyle="normal"
         android:drawableLeft="@drawable/ic_search"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProductsFilter"
-        android:layout_width="match_parent"
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:gravity="center"
         android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:itemCount="4"
-        tools:listitem="@layout/item_filter_list" />
+        android:layout_marginHorizontal="5dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="1dp"
+            app:cardMaxElevation="1dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            android:layout_gravity="center"
+            >
+            <TextView
+                android:id="@+id/tvAllProductsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="2dp"
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                android:textStyle="normal"
+                tools:text="All Products"
+                android:padding="7dp"/>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductsFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_filter_list" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProducts"

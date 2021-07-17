@@ -85,6 +85,23 @@
                 tools:text="20 in stocks" />
         </LinearLayout>
         <TextView
+            android:visibility="gone"
+            android:id="@+id/btnAddDeal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add a deal"
+            android:padding="7dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_gravity="bottom|left"
+            android:layout_alignParentLeft="true"
+            android:layout_marginHorizontal="2dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/buy_btn_bg"
+            android:layout_below="@+id/llCartoonStock"/>
+        <TextView
             android:id="@+id/btnIncreaseQty"
             android:layout_width="30dp"
             android:layout_height="30dp"

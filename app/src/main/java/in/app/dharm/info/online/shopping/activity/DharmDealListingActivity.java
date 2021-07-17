@@ -1,11 +1,5 @@
 package in.app.dharm.info.online.shopping.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,11 +9,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,41 +28,46 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import in.app.dharm.info.online.shopping.R;
+import in.app.dharm.info.online.shopping.adapter.DharmDelListingAdapter;
 import in.app.dharm.info.online.shopping.adapter.FilterAdapter;
 import in.app.dharm.info.online.shopping.adapter.ProductAdapter;
-import in.app.dharm.info.online.shopping.model.FilterListPojo;
 import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
-public class ProductListingActivity extends AppCompatActivity implements View.OnClickListener {
+public class DharmDealListingActivity extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerView rvProducts, rvProductsFilter;
-    private ProductAdapter listAdapter;
+    private DharmDelListingAdapter listAdapter;
     private FilterAdapter filterAdapter;
     ArrayList<ProductListPojo> productArrayList;
     ArrayList<String> filterListPojoArrayList;
-//    ImageView imgBack;
+    //    ImageView imgBack;
     FirebaseFirestore db;
-    public String TAG = "ProductListingActivity";
+    public String TAG = "DharmDealListingActivity";
     ProgressDialog pd;
     MaterialTextView txtNoDataFound;
     EditText etSearch;
     ArrayList<String> images = new ArrayList<>();
     ImageView imgCart;
-    TextView tvAllProductsTitle;
+    TextView tvAllProductsTitle, tvPageTitle;
+    AppBarLayout appBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_listing);
 
-        pd = new ProgressDialog(ProductListingActivity.this);
+        pd = new ProgressDialog(DharmDealListingActivity.this);
         pd.setMessage("loading...");
 
         db = FirebaseFirestore.getInstance();
         productArrayList = new ArrayList<>();
         images = new ArrayList<>();
         filterListPojoArrayList = new ArrayList<>();
+        appBar = findViewById(R.id.appBar);
+        appBar.setVisibility(View.GONE);
         rvProducts = (RecyclerView) findViewById(R.id.rvProducts);
+        tvPageTitle =  findViewById(R.id.tvPageTitle);
+        tvPageTitle.setText("Deal with products !");
         tvAllProductsTitle = findViewById(R.id.tvAllProductsTitle);
         etSearch = findViewById(R.id.etSearch);
         rvProductsFilter = (RecyclerView) findViewById(R.id.rvProductsFilter);
@@ -74,7 +79,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
 //        GridLayoutManager layoutManager = new GridLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         rvProducts.setLayoutManager(layoutManager);
-        listAdapter = new ProductAdapter(productArrayList, this);
+        listAdapter = new DharmDelListingAdapter(productArrayList, this);
         rvProducts.setAdapter(listAdapter);
 
         rvProductsFilter.setHasFixedSize(true);
@@ -138,7 +143,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                             }
                             Log.d(TAG, " => " + productArrayList.size());
                             if (productArrayList.size() > 0) {
-                                listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
+                                listAdapter = new DharmDelListingAdapter(productArrayList, DharmDealListingActivity.this);
                                 rvProducts.setAdapter(listAdapter);
                                 listAdapter.notifyDataSetChanged();
                             } else {
@@ -168,7 +173,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                             }
                             Log.d(TAG, " => " + filterListPojoArrayList.size());
                             if (filterListPojoArrayList.size() > 0) {
-                                filterAdapter = new FilterAdapter(filterListPojoArrayList, ProductListingActivity.this);
+                                filterAdapter = new FilterAdapter(filterListPojoArrayList, DharmDealListingActivity.this);
                                 rvProductsFilter.setAdapter(filterAdapter);
                                 filterAdapter.notifyDataSetChanged();
                             } else {
@@ -209,13 +214,13 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                                 if (productArrayList.size() > 0) {
                                     txtNoDataFound.setVisibility(View.GONE);
                                     rvProducts.setVisibility(View.VISIBLE);
-                                    listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
+                                    listAdapter = new DharmDelListingAdapter(productArrayList, DharmDealListingActivity.this);
                                     rvProducts.setAdapter(listAdapter);
                                     listAdapter.notifyDataSetChanged();
                                 } else {
                                     txtNoDataFound.setVisibility(View.VISIBLE);
                                     rvProducts.setVisibility(View.GONE);
-                                    listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
+                                    listAdapter = new DharmDelListingAdapter(productArrayList, DharmDealListingActivity.this);
                                     rvProducts.setAdapter(listAdapter);
                                     listAdapter.notifyDataSetChanged();
                                 }
@@ -246,7 +251,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                 onBackPressed();
                 break;*/
             case R.id.imgCart:
-                startActivity(new Intent(ProductListingActivity.this, CartProductsActivity.class));
+                startActivity(new Intent(DharmDealListingActivity.this, CartProductsActivity.class));
                 break;
 
             case R.id.tvAllProductsTitle:

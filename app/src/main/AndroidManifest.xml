@@ -21,6 +21,7 @@
         <activity android:name=".activity.ProductDetailActivity" />
         <activity android:name=".activity.ProductListingActivity" />
         <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.DharmDealListingActivity" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

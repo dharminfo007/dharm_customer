@@ -42,7 +42,9 @@ import java.util.List;
 import java.util.Map;
 
 import in.app.dharm.info.online.shopping.R;
+import in.app.dharm.info.online.shopping.adapter.ImageDetailAdapter;
 import in.app.dharm.info.online.shopping.adapter.ProductAdapter;
+import in.app.dharm.info.online.shopping.adapter.ProductDetailImageAdapter;
 import in.app.dharm.info.online.shopping.adapter.ProductImageAdapter;
 import in.app.dharm.info.online.shopping.adapter.SlidingImageAdapter;
 import in.app.dharm.info.online.shopping.common.AutoScrollViewPager;
@@ -60,10 +62,10 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     private ProductImageAdapter listAdapter;
     ArrayList<ImageListPojo> productImageList;
     ArrayList<OrdersListPojo> productOrderList;
-    private ArrayList<BannerListPojo> productImages;
+    private ArrayList<String> productImages;
     Spinner spinnerCartoon, spinnerUnit;
     ImageView imgCart, imgBack;
-    TextView txtAddToCart, txtBuyNow;
+    TextView txtAddToCart, txtDealNow, tvPrice;
     FirebaseFirestore db;
     public String TAG = "ProductDetailActivity";
     String id = "";
@@ -106,12 +108,13 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         rvProducts = findViewById(R.id.rvProductsImage);
         txtAddToCart = findViewById(R.id.txtAddToCart);
         viewPager = findViewById(R.id.vpProductImages);
-        imgCart = findViewById(R.id.imgCart);
+        tvPrice = findViewById(R.id.tvPrice);
+//        imgCart = findViewById(R.id.imgCart);
         imgBack = findViewById(R.id.imgBack);
         txtProdName = findViewById(R.id.txtProdName);
         txtProdDesc = findViewById(R.id.txtProdDesc);
         tvStockStatus = findViewById(R.id.tvStockStatus);
-        txtBuyNow = findViewById(R.id.txtBuyNow);
+        txtDealNow = findViewById(R.id.txtDealNow);
 
         rvProducts.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -162,14 +165,18 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                             } else {
                                 tvStockStatus.setText("OUT OF STOCK");
                             }
+                            tvPrice.setText("₹ " + document.getString("price"));
                             groupImages = (ArrayList<String>) document.get("images");
-                            productImages = (ArrayList<BannerListPojo>) document.get("images");
+                            productImages = (ArrayList<String>) document.get("images");
                             if (groupImages.size() > 0) {
                                 listAdapter = new ProductImageAdapter(groupImages, ProductDetailActivity.this);
                                 rvProducts.setAdapter(listAdapter);
                                 listAdapter.notifyDataSetChanged();
                             }
+
                             if(productImages.size() > 0){
+                                viewPager.setAdapter(new ProductDetailImageAdapter(ProductDetailActivity.this,
+                                        productImages));
 //                                viewPager.setAdapter(new SlidingImageAdapter(ProductDetailActivity.this,
 //                                        productImages));
                             }
@@ -193,10 +200,10 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     }
 
     private void onClickListenersInit() {
-        imgCart.setOnClickListener(this);
+//        imgCart.setOnClickListener(this);
         imgBack.setOnClickListener(this);
         txtAddToCart.setOnClickListener(this);
-//        txtBuyNow.setOnClickListener(this);
+        txtDealNow.setOnClickListener(this);
     }
 
     private void initDynamicListSpinner() {
@@ -298,13 +305,18 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
 
                 break;
 
-           /* case R.id.txtBuyNow:
-                addProductForOrdering();
-                break;*/
+            case R.id.txtDealNow:
+//                addProductForOrdering();
+                 goToDealPageListing();
+                break;
 
             default:
                 break;
         }
+    }
+
+    private void goToDealPageListing() {
+        startActivity(new Intent(ProductDetailActivity.this, DharmDealListingActivity.class));
     }
 
     private void addProductForOrdering() {
