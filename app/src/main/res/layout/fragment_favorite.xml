@@ -5,10 +5,23 @@
     android:layout_height="match_parent"
     tools:context=".fragment.FavoriteFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFavProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txtNoFavDataMatch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_gravity="center|center_horizontal|center_vertical"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/txt_no_data_found"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        android:visibility="gone" />
+
 
 </FrameLayout>

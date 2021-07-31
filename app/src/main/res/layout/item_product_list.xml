@@ -1,27 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView
+    android:id="@+id/llContactUs"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_below="@+id/llOnSale"
+    android:labelFor="@+id/cardProducts"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    app:cardMaxElevation="0.5dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
     android:layout_gravity="center"
-    android:background="@drawable/product_bg">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    >
     <RelativeLayout
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_margin="8dp">
-
+        android:layout_margin="3dp">
+        <!--<androidx.cardview.widget.CardView
+            android:id="@+id/cardProducts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="1dp"
+            app:cardMaxElevation="1dp"
+            >-->
             <ImageView
                 android:id="@+id/imgProduct"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
                 android:layout_centerInParent="true"
                 android:layout_alignParentTop="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/online_shopping_bg" />
-
+                android:scaleType="fitXY"
+                android:background="@drawable/img_bg"
+                android:layout_margin="5dp"
+                android:src="@drawable/online_shopping_bg"
+                />
+<!--
+        </androidx.cardview.widget.CardView>
+-->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
@@ -37,25 +64,13 @@
             android:lines="2"
             tools:text="This is some text" />
 
-        <TextView
-            android:id="@+id/tvPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:lines="1"
-            android:layout_below="@+id/tvTitle"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginVertical="2dp"
-            android:alpha="0.6"
-            android:textColor="@color/black"
-            android:textSize="13sp"
-            android:textStyle="normal"
-            tools:text="This is some temp text" />
+
 
         <LinearLayout
+            android:layout_below="@+id/tvTitle"
             android:id="@+id/llCartoonStock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvPrice"
             android:layout_marginHorizontal="5dp"
             android:layout_marginVertical="2dp"
             android:orientation="horizontal">
@@ -84,6 +99,20 @@
                 android:textStyle="normal"
                 tools:text="20 in stocks" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="2"
+            android:gravity="center"
+            android:layout_below="@+id/llCartoonStock"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="2dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="This is some temp text" />
         <TextView
             android:visibility="gone"
             android:id="@+id/btnAddDeal"
@@ -100,23 +129,21 @@
             android:layout_marginHorizontal="2dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/buy_btn_bg"
-            android:layout_below="@+id/llCartoonStock"/>
+            android:layout_below="@+id/tvPrice"/>
         <TextView
-            android:id="@+id/btnIncreaseQty"
+            android:id="@+id/btnAddToFav"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="+"
+            android:text=""
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
-            android:layout_marginBottom="3dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            android:layout_marginRight="10dp"
             android:layout_gravity="bottom|right"
             android:layout_alignParentRight="true"
-            android:background="@drawable/ic_plus"
-            android:layout_marginHorizontal="2dp"
+            android:background="@drawable/ic_fav"
             android:layout_below="@+id/llCartoonStock"/>
     </RelativeLayout>
 
 </FrameLayout>
+
+</androidx.cardview.widget.CardView>

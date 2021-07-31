@@ -15,34 +15,36 @@ import java.util.ArrayList;
 
 import in.app.dharm.info.online.shopping.R;
 import in.app.dharm.info.online.shopping.activity.CartProductsActivity;
-import in.app.dharm.info.online.shopping.activity.ProductListingActivity;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
 import in.app.dharm.info.online.shopping.fragment.CartFragment;
 import in.app.dharm.info.online.shopping.model.CartProductListPojo;
 
-public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
+public class CartFragmentAdapter extends RecyclerView.Adapter<CartFragmentAdapter.CartHolder> {
 
     // List to store all the contact details
     public ArrayList<CartProductListPojo> cartList;
     private Context mContext;
     int qty = 0;
     DataProcessor dataProcessor;
+    CartFragment cartFragment;
 
     // Counstructor for the Class
-    public CartAdapter(ArrayList<CartProductListPojo> cartList, Context context) {
+    public CartFragmentAdapter(ArrayList<CartProductListPojo> cartList, Context context,
+                               CartFragment cartFragment) {
         this.cartList = cartList;
         this.mContext = context;
+        this.cartFragment = cartFragment;
     }
 
     // This method creates views for the RecyclerView by inflating the layout
     // Into the viewHolders which helps to display the items in the RecyclerView
     @Override
-    public CartAdapter.CartHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CartFragmentAdapter.CartHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
         // Inflate the layout view you have created for the list rows here
         View view = layoutInflater.inflate(R.layout.item_cart_list, parent, false);
-        return new CartAdapter.CartHolder(view);
+        return new CartFragmentAdapter.CartHolder(view);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
-    public void onBindViewHolder(@NonNull CartAdapter.CartHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull CartFragmentAdapter.CartHolder holder, final int position) {
         final CartProductListPojo cartProductPojo = cartList.get(position);
 //        qty = Integer.parseInt(String.valueOf(cartProductPojo.getTvStock()));
         // Set the data to the views here
@@ -107,9 +109,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
         holder.imgClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mContext instanceof CartProductsActivity) {
-                    ((CartProductsActivity) mContext).removeAt(position);
-                }
+                cartFragment.removeAt(position);
+
             }
         });
 
@@ -178,9 +179,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
     }
 
     public void updateGrandTotal() {
-        if (mContext instanceof CartProductsActivity) {
-            ((CartProductsActivity) mContext).grandTotal(cartList);
-        }
+        cartFragment.grandTotal(cartList);
+
     }
 
 }

@@ -1,14 +1,32 @@
 package in.app.dharm.info.online.shopping.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 import in.app.dharm.info.online.shopping.R;
+import in.app.dharm.info.online.shopping.activity.CartProductsActivity;
+import in.app.dharm.info.online.shopping.adapter.CartAdapter;
+import in.app.dharm.info.online.shopping.adapter.FavListAdapter;
+import in.app.dharm.info.online.shopping.common.DataProcessor;
+import in.app.dharm.info.online.shopping.model.CartProductListPojo;
+import in.app.dharm.info.online.shopping.model.GenerateOrderPojo;
+import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +43,16 @@ public class FavoriteFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    RecyclerView rvFavProducts;
+    private FavListAdapter listAdapter;
+    ArrayList<ProductListPojo> productFavList;
+    ImageView imgBack;
+    DataProcessor dataProcessor;
+    TextView txtNoFavDataMatch;
+    public String TAG = "FavoriteFragment";
+    ProgressDialog pd;
+    View mView;
 
     public FavoriteFragment() {
         // Required empty public constructor
@@ -61,6 +89,54 @@ public class FavoriteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false);
+        mView = inflater.inflate(R.layout.fragment_favorite, container, false);
+
+        pd = new ProgressDialog(getActivity());
+        pd.setMessage("loading...");
+
+        productFavList = new ArrayList<>();
+        rvFavProducts = mView.findViewById(R.id.rvFavProducts);
+        txtNoFavDataMatch = mView.findViewById(R.id.txtNoFavDataMatch);
+
+        dataProcessor = new DataProcessor(getActivity());
+
+        rvFavProducts.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        rvFavProducts.setLayoutManager(layoutManager);
+        listAdapter = new FavListAdapter(productFavList, getActivity());
+        rvFavProducts.setAdapter(listAdapter);
+
+        //Load the date from the network or other resources
+        //into the array list asynchronously
+
+        if (dataProcessor.getFavoriteArrayList("favorite") != null
+                && dataProcessor.getFavoriteArrayList("favorite").size() > 0) {
+            pd.show();
+            productFavList = dataProcessor.getFavoriteArrayList("favorite");
+            listAdapter = new FavListAdapter(productFavList, getActivity());
+            rvFavProducts.setAdapter(listAdapter);
+            listAdapter.notifyDataSetChanged();
+            pd.dismiss();
+        } else {
+            checkFavList();
+        }
+
+//        imgBack.setOnClickListener(this);
+//        txtBuyNow.setOnClickListener(this);
+//        grandTotal(cartList);
+
+        return mView;
     }
+
+    private void checkFavList() {
+        if(productFavList.size() > 0){
+            txtNoFavDataMatch.setVisibility(View.GONE);
+            rvFavProducts.setVisibility(View.VISIBLE);
+        }else {
+            txtNoFavDataMatch.setText("No Favorite data found");
+            txtNoFavDataMatch.setVisibility(View.VISIBLE);
+            rvFavProducts.setVisibility(View.GONE);
+        }
+    }
+
 }

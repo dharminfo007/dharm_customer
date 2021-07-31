@@ -1,14 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragment.CartFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCartProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_weight="0.7"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txtNoCartData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_gravity="center|center_horizontal|center_vertical"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/txt_no_data_found"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        android:visibility="gone" />
+    <RelativeLayout
+        android:layout_weight="0.3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/tvOrderTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            tools:text="Order Total "
+            android:layout_alignParentLeft="true"/>
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tvOrderPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            tools:text="0"
+            android:layout_alignParentRight="true"/>
+
+
+        <TextView
+            android:id="@+id/txtBuyNow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/buy_btn_bg"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Order Now"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="normal"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+</LinearLayout>

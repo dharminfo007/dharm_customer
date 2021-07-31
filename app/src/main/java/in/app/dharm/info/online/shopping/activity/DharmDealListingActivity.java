@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textview.MaterialTextView;
@@ -25,12 +27,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import in.app.dharm.info.online.shopping.R;
 import in.app.dharm.info.online.shopping.adapter.DharmDelListingAdapter;
 import in.app.dharm.info.online.shopping.adapter.FilterAdapter;
-import in.app.dharm.info.online.shopping.adapter.ProductAdapter;
+import in.app.dharm.info.online.shopping.common.DataProcessor;
+import in.app.dharm.info.online.shopping.model.GenerateOrderPojo;
 import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
 public class DharmDealListingActivity extends AppCompatActivity implements View.OnClickListener {
@@ -50,6 +57,7 @@ public class DharmDealListingActivity extends AppCompatActivity implements View.
     ImageView imgCart;
     TextView tvAllProductsTitle, tvPageTitle;
     AppBarLayout appBar;
+    DataProcessor dataProcessor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,7 @@ public class DharmDealListingActivity extends AppCompatActivity implements View.
         pd = new ProgressDialog(DharmDealListingActivity.this);
         pd.setMessage("loading...");
 
+        dataProcessor = new DataProcessor(this);
         db = FirebaseFirestore.getInstance();
         productArrayList = new ArrayList<>();
         images = new ArrayList<>();
@@ -273,5 +282,42 @@ public class DharmDealListingActivity extends AppCompatActivity implements View.
         //update recyclerview
         listAdapter.updateList(temp);
     }
+
+    public void addDealToFireStore(String reqCartoon, String dealAmt, String product_id) {
+        pd.show();
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("user", dataProcessor.getStr("phone"));
+        docData.put("product_id", product_id);
+        docData.put("cartoon", reqCartoon);
+        docData.put("deal_amount", dealAmt);
+        docData.put("status", "pending");
+
+        Calendar c = Calendar.getInstance();
+        System.out.println("Current time => " + c.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String currentDate = df.format(c.getTime());
+
+        docData.put("deal_in_date", currentDate);
+
+        db.collection("deallist").document("DOD_"+dataProcessor.getStr("phone")+"_"+product_id)
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        pd.dismiss();
+                        Log.d(TAG, "Deal successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.w(TAG, "Error writing deal", e);
+                    }
+                });
+    }
+
 
 }

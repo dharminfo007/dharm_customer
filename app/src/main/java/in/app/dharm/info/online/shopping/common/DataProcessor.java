@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import in.app.dharm.info.online.shopping.model.CartProductListPojo;
+import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
 public class DataProcessor {
 
@@ -77,7 +78,6 @@ public class DataProcessor {
         String json = gson.toJson(list);
         editor.putString(key, json);
         editor.apply();
-
     }
 
     public ArrayList<CartProductListPojo> getArrayList(String key){
@@ -86,6 +86,37 @@ public class DataProcessor {
         String json = prefs.getString(key, null);
         Type type = new TypeToken<ArrayList<CartProductListPojo>>() {}.getType();
         return gson.fromJson(json, type);
+    }
+
+    public void saveFavoriteArrayList(ArrayList<ProductListPojo> list, String key){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+
+    }
+
+    public ArrayList<ProductListPojo> getFavoriteArrayList(String key){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<ArrayList<ProductListPojo>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
+    public void removeFromFavArrayList(ArrayList<ProductListPojo> list, String key, ProductListPojo product){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        list.remove(product);
+        saveFavoriteArrayList(list, "favorite");
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+        editor.commit();
+
     }
 
 }

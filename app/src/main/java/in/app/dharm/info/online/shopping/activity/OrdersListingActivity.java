@@ -20,9 +20,7 @@ import java.util.ArrayList;
 
 import in.app.dharm.info.online.shopping.R;
 import in.app.dharm.info.online.shopping.adapter.OrdersAdapter;
-import in.app.dharm.info.online.shopping.adapter.ProductAdapter;
 import in.app.dharm.info.online.shopping.model.OrdersListPojo;
-import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
 public class OrdersListingActivity extends AppCompatActivity implements View.OnClickListener {
 

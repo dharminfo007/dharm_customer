@@ -34,33 +34,45 @@
             android:layout_gravity="center|start"
             android:layout_marginHorizontal="10dp"
             android:paddingVertical="15dp"
-            android:text="@string/txt_add_phone"
+            android:text="@string/txt_login"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="normal" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:background="@drawable/white_bg_button"
-            android:hint="@string/txt_add_mo_no"
-            app:startIconDrawable="@drawable/ic_phone">
 
             <EditText
                 android:id="@+id/etMoNo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="start|center"
+                android:drawableLeft="@drawable/ic_phone_login"
+                android:drawablePadding="10dp"
                 android:background="@drawable/white_bg_button"
                 android:gravity="start|center"
+                android:hint="@string/txt_add_mo_no"
+                android:padding="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:inputType="phone"
                 android:maxLength="10"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:textColorHint="@color/hint_color" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <EditText
+                android:id="@+id/etAddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|center"
+                android:hint="@string/txt_address"
+                android:padding="10dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:drawableLeft="@drawable/ic_location_login"
+                android:drawablePadding="10dp"
+                android:background="@drawable/white_bg_button"
+                android:gravity="start|center"
+                android:inputType="textMultiLine"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color" />
+
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvLogin"

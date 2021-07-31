@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,9 +23,10 @@ import in.app.dharm.info.online.shopping.activity.ImageDetailsActivity;
 import in.app.dharm.info.online.shopping.activity.ProductDetailActivity;
 import in.app.dharm.info.online.shopping.activity.ProductListingActivity;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
+import in.app.dharm.info.online.shopping.fragment.CartFragment;
 import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactHolder> {
+public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CartHolder> {
 
     // List to store all the contact details
     public ArrayList<ProductListPojo> productList;
@@ -34,20 +34,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
     DataProcessor dataProcessor;
 
     // Counstructor for the Class
-    public ProductAdapter(ArrayList<ProductListPojo> contactsList, Context context) {
-        this.productList = contactsList;
+    public FavListAdapter(ArrayList<ProductListPojo> productList, Context context) {
+        this.productList = productList;
         this.mContext = context;
     }
 
     // This method creates views for the RecyclerView by inflating the layout
     // Into the viewHolders which helps to display the items in the RecyclerView
     @Override
-    public ContactHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavListAdapter.CartHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
         // Inflate the layout view you have created for the list rows here
-        View view = layoutInflater.inflate(R.layout.item_product_list, parent, false);
-        return new ContactHolder(view);
+        View view = layoutInflater.inflate(R.layout.item_fav_list, parent, false);
+        return new FavListAdapter.CartHolder(view);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
 
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
-    public void onBindViewHolder(@NonNull ContactHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull FavListAdapter.CartHolder holder, final int position) {
         final ProductListPojo product = productList.get(position);
 
         // Set the data to the views here
@@ -65,11 +65,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
         holder.setProductCartoon(product.getTvPiecesPerCartoon() + " /Cartoons");
         holder.setProductStock(product.getTvStock()+" in stocks");
         holder.setProductPrice("₹ " + product.getTvPrice());
-        if(product.isFav() == true){
-            holder.btnAddToFav.setBackgroundResource(R.drawable.ic_fav_selected);
-        }else {
-            holder.btnAddToFav.setBackgroundResource(R.drawable.ic_fav);
-        }
         if (productList.get(position).getListProductImages().size() > 0) {
             Glide
                     .with(mContext)
@@ -87,21 +82,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             }
         });
 
-        holder.btnAddToFav.setOnClickListener(new View.OnClickListener() {
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(product.isFav() == true){
-                    dataProcessor = new DataProcessor(mContext);
-                    dataProcessor.getFavoriteArrayList("favorite").remove(product);
-                    dataProcessor.saveFavoriteArrayList(dataProcessor.getFavoriteArrayList("favorite"), "favorite");
-                    productList.get(position).setFav(false);
-                    notifyDataSetChanged();
-                }else {
-                    if (mContext instanceof ProductListingActivity) {
-                        ((ProductListingActivity) mContext).addProductToFavorite(position);
-                    }
-                }
-
+                dataProcessor = new DataProcessor(mContext);
+                productList.remove(position);
+                dataProcessor.getFavoriteArrayList("favorite").remove(position);
+                dataProcessor.saveFavoriteArrayList(productList, "favorite");
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, productList.size());
             }
         });
 
@@ -114,28 +103,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             }
         });
 
-        // You can set click listners to indvidual items in the viewholder here
-        // make sure you pass down the listner or make the Data members of the viewHolder public
 
     }
 
     // This is your ViewHolder class that helps to populate data to the view
-    public class ContactHolder extends RecyclerView.ViewHolder {
+    public class CartHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvTitle, btnAddToFav, tvCartoon, tvStock, tvPrice;
-//        CardView cardProducts;
+        private TextView tvTitle, btnDelete, tvCartoon, tvStock, tvPrice;
+        //        CardView cardProducts;
         ImageView imgProduct;
 
-        public ContactHolder(View itemView) {
+        public CartHolder(View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            btnAddToFav = itemView.findViewById(R.id.btnAddToFav);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
             tvCartoon = itemView.findViewById(R.id.tvCartoon);
             tvStock = itemView.findViewById(R.id.tvStock);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-//            tvOfferDisc = itemView.findViewById(R.id.tvOfferDisc);
-//            cardProducts = itemView.findViewById(R.id.cardProducts);
             imgProduct = itemView.findViewById(R.id.imgProduct);
 
         }
@@ -143,10 +128,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
         public void setProductTitle(String title) {
             tvTitle.setText(title);
         }
-
-//        public void setProductDesc(String desc) {
-//            tvDesc.setText(desc);
-//        }
 
         public void setProductCartoon(String cartoon) {
             tvCartoon.setText(cartoon);
@@ -159,14 +140,5 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
         public void setProductPrice(String price) {
             tvPrice.setText(price);
         }
-//        public void setProductOfferDisc(String offerDisc) {
-//            tvOfferDisc.setText(offerDisc);
-//        }
     }
-
-    public void updateList(ArrayList<ProductListPojo> list) {
-        productList = list;
-        notifyDataSetChanged();
-    }
-
 }

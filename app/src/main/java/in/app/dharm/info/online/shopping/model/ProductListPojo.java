@@ -17,6 +17,7 @@ public class ProductListPojo implements Serializable {
     String tvOfferDisc;
     String type;
     String id;
+    boolean isFav = false;
     public ArrayList<String> listProductImages;
 
     public ProductListPojo(String name, String tvDesc, String tvPiecesPerCartoon, String tvStock,
@@ -112,5 +113,14 @@ public class ProductListPojo implements Serializable {
     public void setListProductImages(ArrayList<String> listProductImages) {
         this.listProductImages = listProductImages;
     }
+
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
+    }
+
 }
 

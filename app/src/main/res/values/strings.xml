@@ -7,8 +7,11 @@
     <string name="txt_order">ORDERS</string>
     <string name="txt_skip">SKIP</string>
     <string name="txt_add_mo_no">Add your mobile number</string>
+    <string name="txt_address">Add your address</string>
     <string name="txt_add_msg">Add your message</string>
     <string name="txt_mo_no">Mobile number</string>
+    <string name="txt_req_cartoons">Add cartoons</string>
+    <string name="txt_deal_amt">Add Amount to deal with</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txt_more_offer">Please contact for more offers</string>
@@ -18,4 +21,6 @@
     <string name="txt_abt_product">Add Product :</string>
     <string name="font_combi">combi_sanse_medium</string>
     <string name="txt_no_data_found">No product found</string>
+    <string name="txt_logout">LOGOUT</string>
+    <string name="txt_add_deal">ADD DEAL</string>
 </resources>

@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -23,11 +24,13 @@ import android.widget.VideoView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +69,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public String TAG = "HomeFragment";
     List<ProductListPojo> productArrayList = new ArrayList<>();
     ArrayList<String> images = new ArrayList<>();
+    ExtendedFloatingActionButton floatingButtonToDeal;
+    NestedScrollView nestedScrollView;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -110,6 +116,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         videoOnLaunch = mView.findViewById(R.id.videoOnLaunch);
         llContactUs = mView.findViewById(R.id.llContactUs);
         viewPager = mView.findViewById(R.id.view_pager);
+        floatingButtonToDeal = mView.findViewById(R.id.floatingButtonToDeal);
+        nestedScrollView = mView.findViewById(R.id.nestedScrollView);
+//        floatingButtonToDeal.shrink();
         viewPager.setAdapter(new SlidingImageAdapter(getActivity(),
                 bannerArrayList));
 
@@ -127,9 +136,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //        txtLogin.setOnClickListener(this);
 //        imgWallet.setOnClickListener(this);
         llContactUs.setOnClickListener(this);
+        floatingButtonToDeal.setOnClickListener(this);
         initProductDataAvailability();
         initBannerDataAvailability();
+        nestedWithFloatingButton();
         return mView;
+    }
+
+    private void nestedWithFloatingButton() {
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                // the delay of the extension of the FAB is set for 12 items
+                if (scrollY > oldScrollY + 12 && floatingButtonToDeal.isExtended()) {
+                    floatingButtonToDeal.shrink();
+                }
+
+                // the delay of the extension of the FAB is set for 12 items
+                if (scrollY < oldScrollY - 12 && !floatingButtonToDeal.isExtended()) {
+                    floatingButtonToDeal.extend();
+                }
+
+                // if the nestedScrollView is at the first item of the list then the
+                // extended floating action should be in extended state
+                if (scrollY == 0) {
+                    floatingButtonToDeal.extend();
+                }
+            }
+        });
     }
 
     @Override
@@ -137,6 +171,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         createVideoThumbnail();
         super.onResume();
     }
+
     private void createVideoThumbnail() {
         Uri videoURI = Uri.parse("android.resource://" + getActivity().getPackageName() + "/raw/grab_the_best_offer_now");
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -164,17 +199,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
 
-          case R.id.llProducts:
-                startActivity(new Intent(getActivity(), ProductListingActivity.class));
+            case R.id.llProducts:
+                Intent intentProducts = new Intent(getActivity(), ProductListingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("productList", (Serializable)productArrayList);
+                intentProducts.putExtra("BUNDLE", bundle);
+                startActivity(intentProducts);
                 break;
 
             case R.id.llContactUs:
                 startActivity(new Intent(getActivity(), ContactUsActivity.class));
                 break;
 
+            case R.id.floatingButtonToDeal:
+                goToDealPageListing();
+                break;
+
             default:
                 break;
         }
+    }
+
+    private void goToDealPageListing() {
+        startActivity(new Intent(getActivity(), DharmDealListingActivity.class));
     }
 
     private void initProductDataAvailability() {

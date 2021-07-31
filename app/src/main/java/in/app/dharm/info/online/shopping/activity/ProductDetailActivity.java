@@ -42,19 +42,15 @@ import java.util.List;
 import java.util.Map;
 
 import in.app.dharm.info.online.shopping.R;
-import in.app.dharm.info.online.shopping.adapter.ImageDetailAdapter;
-import in.app.dharm.info.online.shopping.adapter.ProductAdapter;
 import in.app.dharm.info.online.shopping.adapter.ProductDetailImageAdapter;
 import in.app.dharm.info.online.shopping.adapter.ProductImageAdapter;
-import in.app.dharm.info.online.shopping.adapter.SlidingImageAdapter;
 import in.app.dharm.info.online.shopping.common.AutoScrollViewPager;
 import in.app.dharm.info.online.shopping.common.Common;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
-import in.app.dharm.info.online.shopping.model.BannerListPojo;
 import in.app.dharm.info.online.shopping.model.CartProductListPojo;
 import in.app.dharm.info.online.shopping.model.ImageListPojo;
 import in.app.dharm.info.online.shopping.model.OrdersListPojo;
-import in.app.dharm.info.online.shopping.model.ProductListPojo;
+
 
 public class ProductDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
@@ -69,12 +65,13 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     FirebaseFirestore db;
     public String TAG = "ProductDetailActivity";
     String id = "";
-    TextView txtProdName, txtProdDesc, tvStockStatus;
+    TextView txtProdName, txtProdDesc, tvStockStatus, btnDecreaseQty, btnIncreaseQty,tvQty;
     ArrayList<String> groupImages;
     DataProcessor dataProcessor;
     ArrayList<CartProductListPojo> cartProductList;
     CartProductListPojo cartProductListPojo;
-    String name, desc, selUnit, price, in_date, type, qty = "1", stock, piecesPerCartoon;
+    String name, desc, selUnit, price, in_date, type, stock, piecesPerCartoon;
+    int qty = 1;
     ProgressDialog pd;
     DatabaseReference databaseReference;
     FirebaseDatabase firebaseDatabase;
@@ -108,6 +105,9 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         rvProducts = findViewById(R.id.rvProductsImage);
         txtAddToCart = findViewById(R.id.txtAddToCart);
         viewPager = findViewById(R.id.vpProductImages);
+        btnDecreaseQty = findViewById(R.id.btnDecreaseQty);
+        btnIncreaseQty = findViewById(R.id.btnIncreaseQty);
+        tvQty = findViewById(R.id.tvQty);
         tvPrice = findViewById(R.id.tvPrice);
 //        imgCart = findViewById(R.id.imgCart);
         imgBack = findViewById(R.id.imgBack);
@@ -204,6 +204,8 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         imgBack.setOnClickListener(this);
         txtAddToCart.setOnClickListener(this);
         txtDealNow.setOnClickListener(this);
+        btnIncreaseQty.setOnClickListener(this);
+        btnDecreaseQty.setOnClickListener(this);
     }
 
     private void initDynamicListSpinner() {
@@ -259,7 +261,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        qty = spinnerCartoon.getSelectedItem().toString();
+        qty = Integer.parseInt(spinnerCartoon.getSelectedItem().toString());
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -284,22 +286,26 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                         cartProductList = dataProcessor.getArrayList("cart");
                         cartProductListPojo = new CartProductListPojo(
                                 name,
-                                desc, qty, stock, price, in_date, type, id, selUnit, piecesPerCartoon);
+                                desc, qty+"", stock, price, in_date, type, id, selUnit, piecesPerCartoon);
                         cartProductList.add(cartProductListPojo);
                         dataProcessor.saveArrayList(cartProductList, "cart");
                         Toast.makeText(ProductDetailActivity.this, "Your product added to cart", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(ProductDetailActivity.this, CartProductsActivity.class));
                     } else {
                         Toast.makeText(this, "Product already added to cart", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     cartProductList = dataProcessor.getArrayList("cart");
+                    if(cartProductList==null){
+                        cartProductList = new ArrayList<>();
+                    }
                     cartProductListPojo = new CartProductListPojo(
                             name,
-                            desc, qty, stock, price, in_date, type, id, selUnit, piecesPerCartoon);
+                            desc, qty+"", stock, price, in_date, type, id, selUnit, piecesPerCartoon);
                     cartProductList.add(cartProductListPojo);
                     dataProcessor.saveArrayList(cartProductList, "cart");
                     Toast.makeText(ProductDetailActivity.this, "Your product added to cart", Toast.LENGTH_LONG).show();
-
+                    startActivity(new Intent(ProductDetailActivity.this, CartProductsActivity.class));
                 }
 
 
@@ -308,6 +314,20 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
             case R.id.txtDealNow:
 //                addProductForOrdering();
                  goToDealPageListing();
+                break;
+
+            case R.id.btnDecreaseQty:
+                if (qty > 1) {
+                    qty--;
+                    tvQty.setText(String.valueOf(qty));
+                }
+                break;
+
+            case R.id.btnIncreaseQty:
+                if (qty < 20) {
+                    qty++;
+                    tvQty.setText(String.valueOf(qty));
+                }
                 break;
 
             default:
@@ -333,7 +353,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         data.put("in_date", "" + currentDate);
         data.put("price", price);
         data.put("qty", "" + qty);
-        data.put("total_price", "₹ " + (Long.parseLong(price.trim().toString()) * Integer.parseInt(qty)) + "");
+        data.put("total_price", "₹ " + (Long.parseLong(price.trim().toString()) * qty) + "");
         data.put("user", "");
         data.put("order_no", "DIO_"+String.valueOf(getOrderListSize()+1));
 

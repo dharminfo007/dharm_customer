@@ -4,15 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,20 +21,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import in.app.dharm.info.online.shopping.R;
 import in.app.dharm.info.online.shopping.adapter.CartAdapter;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
 import in.app.dharm.info.online.shopping.model.CartProductListPojo;
 import in.app.dharm.info.online.shopping.model.GenerateOrderPojo;
-import in.app.dharm.info.online.shopping.model.OrdersListPojo;
 
 public class CartProductsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,6 +47,7 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
     public String TAG = "CartProductsActivity";
     long orderSize = 0;
     ProgressDialog pd;
+    LinearLayout llBottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +69,7 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
         tvOrderTotal = findViewById(R.id.tvOrderTotal);
         tvNoCart = findViewById(R.id.tvNoCart);
         txtBuyNow = findViewById(R.id.txtBuyNow);
+        llBottom = findViewById(R.id.llBottom);
 
         dataProcessor = new DataProcessor(this);
 
@@ -108,7 +106,13 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
                 break;
 
             case R.id.txtBuyNow:
-                addOrderToFireStore();
+                if (dataProcessor.getBool("isLogin") == true) {
+                    addOrderToFireStore();
+                } else {
+                    Toast.makeText(CartProductsActivity.this, "You need to login first..", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(CartProductsActivity.this, LoginActivity.class));
+                    finishAffinity();
+                }
                 break;
             default:
                 break;
@@ -119,8 +123,8 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
         pd.show();
         GenerateOrderPojo ordersListPojo = new GenerateOrderPojo();
         Map<String, Object> docData = new HashMap<>();
-        docData.put("user", "");
-        docData.put("order_total", grandTotal(cartList));
+        docData.put("user", dataProcessor.getStr("phone"));
+        docData.put("order_total", grandTotal(cartList)+"");
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
 
@@ -187,10 +191,12 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
         if(cartList.size() > 0){
             tvNoCart.setVisibility(View.GONE);
             rvProducts.setVisibility(View.VISIBLE);
+            llBottom.setVisibility(View.VISIBLE);
         }else {
             tvNoCart.setText("Cart is empty");
             tvNoCart.setVisibility(View.VISIBLE);
             rvProducts.setVisibility(View.GONE);
+            llBottom.setVisibility(View.GONE);
         }
     }
 

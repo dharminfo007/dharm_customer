@@ -22,6 +22,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ContactHol
     // List to store all the contact details
     public ArrayList<String> productTypeList;
     private Context mContext;
+    public static int selectedPos = -1;
 
     // Counstructor for the Class
     public FilterAdapter(ArrayList<String> productTypeList, Context context) {
@@ -54,6 +55,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ContactHol
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selectedPos = position;
                 if (mContext instanceof ProductListingActivity) {
                     ((ProductListingActivity)mContext).filterProductsListing(productTypeList.get(position).toString());
                 }else if(mContext instanceof DharmDealListingActivity){
@@ -63,16 +65,24 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ContactHol
             }
         });
 
+        if(selectedPos == position){
+            holder.cardViewFilter.setCardBackgroundColor(mContext.getResources().getColor(R.color.hint_color));
+        }else {
+            holder.cardViewFilter.setCardBackgroundColor(mContext.getResources().getColor(R.color.white));
+        }
+
     }
 
     // This is your ViewHolder class that helps to populate data to the view
     public class ContactHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTitle;
+        private CardView cardViewFilter;
 
         public ContactHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
+            cardViewFilter = itemView.findViewById(R.id.cardViewFilter);
         }
 
         public void setFilterTitle(String title) {

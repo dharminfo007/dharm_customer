@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +31,9 @@ import java.util.ArrayList;
 import in.app.dharm.info.online.shopping.R;
 import in.app.dharm.info.online.shopping.adapter.FilterAdapter;
 import in.app.dharm.info.online.shopping.adapter.ProductAdapter;
+import in.app.dharm.info.online.shopping.common.Common;
+import in.app.dharm.info.online.shopping.common.DataProcessor;
+import in.app.dharm.info.online.shopping.model.CartProductListPojo;
 import in.app.dharm.info.online.shopping.model.FilterListPojo;
 import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
@@ -39,6 +43,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
     private ProductAdapter listAdapter;
     private FilterAdapter filterAdapter;
     ArrayList<ProductListPojo> productArrayList;
+    ArrayList<ProductListPojo> productFavArrayList;
     ArrayList<String> filterListPojoArrayList;
 //    ImageView imgBack;
     FirebaseFirestore db;
@@ -49,6 +54,8 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
     ArrayList<String> images = new ArrayList<>();
     ImageView imgCart;
     TextView tvAllProductsTitle;
+    DataProcessor dataProcessor;
+    ProductListPojo productListPojo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +65,13 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
         pd = new ProgressDialog(ProductListingActivity.this);
         pd.setMessage("loading...");
 
+        dataProcessor = new DataProcessor(this);
+
         db = FirebaseFirestore.getInstance();
         productArrayList = new ArrayList<>();
         images = new ArrayList<>();
         filterListPojoArrayList = new ArrayList<>();
+        productFavArrayList = new ArrayList<>();
         rvProducts = (RecyclerView) findViewById(R.id.rvProducts);
         tvAllProductsTitle = findViewById(R.id.tvAllProductsTitle);
         etSearch = findViewById(R.id.etSearch);
@@ -86,6 +96,8 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
         filterAdapter.notifyDataSetChanged();
 
         onClickListenersInit();
+        filterAdapter.selectedPos = -1;
+        filterAdapter.notifyDataSetChanged();
         initProductDataAvailability();
         initFilterDataAvailability();
         findProducts();
@@ -110,7 +122,10 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
             public void afterTextChanged(Editable s) {
 
                 // filter your list from your input
-                filter(s.toString());
+                if(s.length() > 0){
+                    filter(s.toString());
+                }
+
                 //you can use runnable postDelayed like 500 ms to delay search text
             }
         });
@@ -134,14 +149,28 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                                         document.getString("stock"),
                                         document.getString("price"), document.getString("in_date"),
                                         document.getString("type"),document.getString("id"),(ArrayList<String>) document.get("images"));
+
+                                if(dataProcessor.getFavoriteArrayList("favorite") != null){
+                                    for(int i = 0; i< dataProcessor.getFavoriteArrayList("favorite").size(); i++){
+                                        if(dataProcessor.getFavoriteArrayList("favorite").get(i).getId().equals(document.getString("id"))){
+                                            productListPojo.setFav(true);
+                                        }
+                                    }
+                                }
+
+
                                 productArrayList.add(productListPojo);
                             }
                             Log.d(TAG, " => " + productArrayList.size());
                             if (productArrayList.size() > 0) {
+                                txtNoDataFound.setVisibility(View.GONE);
+                                rvProducts.setVisibility(View.VISIBLE);
                                 listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
                                 rvProducts.setAdapter(listAdapter);
                                 listAdapter.notifyDataSetChanged();
                             } else {
+                                txtNoDataFound.setVisibility(View.VISIBLE);
+                                rvProducts.setVisibility(View.GONE);
                                 listAdapter.notifyDataSetChanged();
                             }
 
@@ -160,7 +189,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            productArrayList = new ArrayList<>();
+                            filterListPojoArrayList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 String productFilterListPojo = document.getId();
@@ -202,6 +231,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                                             document.getString("stock"),
                                             document.getString("price"), document.getString("in_date"),
                                             document.getString("type"),document.getString("id"),(ArrayList<String>) document.get("images"));
+
                                     productArrayList.add(productListPojo);
 
                                 }
@@ -212,12 +242,14 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                                     listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
                                     rvProducts.setAdapter(listAdapter);
                                     listAdapter.notifyDataSetChanged();
+                                    filterAdapter.notifyDataSetChanged();
                                 } else {
                                     txtNoDataFound.setVisibility(View.VISIBLE);
                                     rvProducts.setVisibility(View.GONE);
                                     listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
                                     rvProducts.setAdapter(listAdapter);
                                     listAdapter.notifyDataSetChanged();
+                                    filterAdapter.notifyDataSetChanged();
                                 }
                             } else {
                                 pd.dismiss();
@@ -250,7 +282,11 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.tvAllProductsTitle:
+
+                filterAdapter.selectedPos = -1;
+                filterAdapter.notifyDataSetChanged();
                 initProductDataAvailability();
+
                 break;
             default:
                 break;
@@ -268,5 +304,57 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
         //update recyclerview
         listAdapter.updateList(temp);
     }
+
+    public void addProductToFavorite(int position){
+        if (dataProcessor.getFavoriteArrayList("favorite") != null) {
+            if (!Common.containsFavoriteProduct(dataProcessor.getFavoriteArrayList("favorite"),
+                    productArrayList.get(position).getName())) {
+                productFavArrayList = dataProcessor.getFavoriteArrayList("favorite");
+                productListPojo = new ProductListPojo(productArrayList.get(position).getName(),
+                        productArrayList.get(position).getTvDesc(), productArrayList.get(position).getTvPiecesPerCartoon(),
+                        productArrayList.get(position).getTvStock(),
+                        productArrayList.get(position).getTvPrice(), productArrayList.get(position).getIn_date(),
+                        productArrayList.get(position).getType(), productArrayList.get(position).getId(),
+                        productArrayList.get(position).getListProductImages());
+                productListPojo.setFav(true);
+                productArrayList.get(position).setFav(true);
+                productFavArrayList.add(productListPojo);
+                dataProcessor.saveFavoriteArrayList(productFavArrayList, "favorite");
+                listAdapter.notifyDataSetChanged();
+                Toast.makeText(ProductListingActivity.this, "Your product added to favorite", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Product already added to favorite", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            productFavArrayList = dataProcessor.getFavoriteArrayList("favorite");
+            if(productFavArrayList==null){
+                productFavArrayList = new ArrayList<>();
+            }
+            Log.e(TAG, "addProductToFavorite: "+ position);
+            if(productArrayList.size() > 0){
+                productListPojo = new ProductListPojo(productArrayList.get(position).getName(),
+                        productArrayList.get(position).getTvDesc(),
+                        productArrayList.get(position).getTvPiecesPerCartoon(),
+                        productArrayList.get(position).getTvStock(),
+                        productArrayList.get(position).getTvPrice(),
+                        productArrayList.get(position).getIn_date(),
+                        productArrayList.get(position).getType(),
+                        productArrayList.get(position).getId(),
+                        productArrayList.get(position).getListProductImages());
+                productListPojo.setFav(true);
+                productArrayList.get(position).setFav(true);
+                productFavArrayList.add(productListPojo);
+                dataProcessor.saveFavoriteArrayList(productFavArrayList, "favorite");
+                listAdapter.notifyDataSetChanged();
+                Toast.makeText(ProductListingActivity.this, "Your product added to favorite", Toast.LENGTH_LONG).show();
+
+            }else {
+                Toast.makeText(ProductListingActivity.this, "No product found", Toast.LENGTH_LONG).show();
+
+            }
+
+        }
+    }
+
 
 }

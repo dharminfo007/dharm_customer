@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+
+        <ImageView
+            android:id="@+id/imgProduct"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/online_shopping_bg" />
+
+        <RelativeLayout
+            android:id="@+id/rlTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/imgProduct"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="2dp">
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center|start"
+            android:lines="2"
+            tools:text="This is some text" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="2dp"
+            android:alpha="0.6"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            tools:text="This is some temp text" />
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/llCartoonStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlTitle"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="2dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvCartoon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                tools:text="20 cartoons" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:background="@color/black" />
+
+            <TextView
+                android:id="@+id/tvStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                tools:text="20 in stocks" />
+        </LinearLayout>
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/btnAddDeal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add a deal"
+            android:padding="7dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_gravity="bottom|left"
+            android:layout_alignParentLeft="true"
+            android:layout_marginHorizontal="2dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/buy_btn_bg"
+            android:layout_below="@+id/llCartoonStock"/>
+        <TextView
+            android:id="@+id/btnDetailTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter details to make a deal :"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_gravity="bottom|left"
+            android:layout_alignParentLeft="true"
+            android:layout_marginHorizontal="2dp"
+            android:layout_below="@+id/llCartoonStock"/>
+        <LinearLayout
+            android:id="@+id/llEditFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/btnDetailTitle">
+
+
+
+                <EditText
+                    android:id="@+id/etReqCartoon"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start|center"
+                    android:background="@drawable/white_bg_button"
+                    android:gravity="start|center"
+                    android:hint="@string/txt_req_cartoons"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:layout_margin="5dp"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="5dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/hint_color"
+
+                    />
+
+
+                <EditText
+                    android:id="@+id/etReqAmt"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start|center"
+                    android:background="@drawable/white_bg_button"
+                    android:gravity="start|center"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:layout_margin="5dp"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="5dp"
+                    android:textColor="@color/black"
+                    android:hint="@string/txt_deal_amt"
+                    android:textColorHint="@color/hint_color" />
+
+
+  </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCartoon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/llEditFields"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Pieces : "
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                android:id="@+id/txt_TotalCartoons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCalculation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/llEditFields"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Amount : "
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                android:id="@+id/txt_TotalAmt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+
+                />
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvAddDeal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/black_btn_bg"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            android:text="@string/txt_add_deal"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/llCalculation"/>
+
+        <ImageView
+            android:id="@+id/imgClose"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="top|right"
+            android:src="@drawable/ic_close"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
