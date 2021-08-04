@@ -84,7 +84,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
 //        GridLayoutManager layoutManager = new GridLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         rvProducts.setLayoutManager(layoutManager);
-        listAdapter = new ProductAdapter(productArrayList, this);
+        listAdapter = new ProductAdapter(productArrayList, dataProcessor.getFavoriteArrayList("favorite"),this);
         rvProducts.setAdapter(listAdapter);
 
         rvProductsFilter.setHasFixedSize(true);
@@ -155,6 +155,9 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                                         if(dataProcessor.getFavoriteArrayList("favorite").get(i).getId().equals(document.getString("id"))){
                                             productListPojo.setFav(true);
                                         }
+//                                        else {
+//                                            productListPojo.setFav(false);
+//                                        }
                                     }
                                 }
 
@@ -165,7 +168,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                             if (productArrayList.size() > 0) {
                                 txtNoDataFound.setVisibility(View.GONE);
                                 rvProducts.setVisibility(View.VISIBLE);
-                                listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
+                                listAdapter = new ProductAdapter(productArrayList, dataProcessor.getFavoriteArrayList("favorite"), ProductListingActivity.this);
                                 rvProducts.setAdapter(listAdapter);
                                 listAdapter.notifyDataSetChanged();
                             } else {
@@ -239,14 +242,14 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                                 if (productArrayList.size() > 0) {
                                     txtNoDataFound.setVisibility(View.GONE);
                                     rvProducts.setVisibility(View.VISIBLE);
-                                    listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
+                                    listAdapter = new ProductAdapter(productArrayList, dataProcessor.getFavoriteArrayList("favorite"),ProductListingActivity.this);
                                     rvProducts.setAdapter(listAdapter);
                                     listAdapter.notifyDataSetChanged();
                                     filterAdapter.notifyDataSetChanged();
                                 } else {
                                     txtNoDataFound.setVisibility(View.VISIBLE);
                                     rvProducts.setVisibility(View.GONE);
-                                    listAdapter = new ProductAdapter(productArrayList, ProductListingActivity.this);
+                                    listAdapter = new ProductAdapter(productArrayList, dataProcessor.getFavoriteArrayList("favorite"),ProductListingActivity.this);
                                     rvProducts.setAdapter(listAdapter);
                                     listAdapter.notifyDataSetChanged();
                                     filterAdapter.notifyDataSetChanged();

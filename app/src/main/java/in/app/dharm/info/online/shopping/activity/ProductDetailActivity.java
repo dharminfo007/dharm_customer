@@ -2,26 +2,33 @@ package in.app.dharm.info.online.shopping.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,6 +57,7 @@ import in.app.dharm.info.online.shopping.common.DataProcessor;
 import in.app.dharm.info.online.shopping.model.CartProductListPojo;
 import in.app.dharm.info.online.shopping.model.ImageListPojo;
 import in.app.dharm.info.online.shopping.model.OrdersListPojo;
+import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
 
 public class ProductDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -60,12 +68,12 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     ArrayList<OrdersListPojo> productOrderList;
     private ArrayList<String> productImages;
     Spinner spinnerCartoon, spinnerUnit;
-    ImageView imgCart, imgBack;
+    ImageView imgCart, imgBack, imgLike;
     TextView txtAddToCart, txtDealNow, tvPrice;
     FirebaseFirestore db;
     public String TAG = "ProductDetailActivity";
     String id = "";
-    TextView txtProdName, txtProdDesc, tvStockStatus, btnDecreaseQty, btnIncreaseQty,tvQty;
+    TextView txtProdName, txtProdDesc, tvStockStatus, btnDecreaseQty, btnIncreaseQty, tvQty;
     ArrayList<String> groupImages;
     DataProcessor dataProcessor;
     ArrayList<CartProductListPojo> cartProductList;
@@ -77,6 +85,10 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     FirebaseDatabase firebaseDatabase;
     long orderSize = 0;
     AutoScrollViewPager viewPager;
+    ProductListPojo product;
+    CardView cardFav;
+    ArrayList<ProductListPojo> productFavArrayList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +106,13 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         pd = new ProgressDialog(ProductDetailActivity.this);
         pd.setMessage("loading...");
 
+        product = new ProductListPojo();
         cartProductList = new ArrayList<>();
         groupImages = new ArrayList<>();
         productImageList = new ArrayList<>();
         productOrderList = new ArrayList<>();
         productImages = new ArrayList<>();
+        productFavArrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("orderlist");
 //        cartProductList = dataProcessor.getArrayList("cart");
@@ -109,12 +123,13 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         btnIncreaseQty = findViewById(R.id.btnIncreaseQty);
         tvQty = findViewById(R.id.tvQty);
         tvPrice = findViewById(R.id.tvPrice);
-//        imgCart = findViewById(R.id.imgCart);
+        cardFav = findViewById(R.id.cardFav);
         imgBack = findViewById(R.id.imgBack);
         txtProdName = findViewById(R.id.txtProdName);
         txtProdDesc = findViewById(R.id.txtProdDesc);
         tvStockStatus = findViewById(R.id.tvStockStatus);
         txtDealNow = findViewById(R.id.txtDealNow);
+        imgLike = findViewById(R.id.imgLike);
 
         rvProducts.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -158,6 +173,15 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Log.d(TAG, document.getId() + " => " + document.getData());
                         if (document.getData() != null || document.getData().size() > 0) {
+                            product = new ProductListPojo(document.getString("name"),
+                                    document.getString("description"),
+                                    document.getString("pieces per cartoon"),
+                                    document.getString("stock"),
+                                    document.getString("price"),
+                                    document.getString("in_date"),
+                                    document.getString("type"),
+                                    document.getString("id"),
+                                    (ArrayList<String>) document.get("images"));
                             txtProdName.setText(document.getString("name"));
                             txtProdDesc.setText(document.getString("description"));
                             if (Integer.parseInt(document.getString("stock")) > 0) {
@@ -174,7 +198,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                                 listAdapter.notifyDataSetChanged();
                             }
 
-                            if(productImages.size() > 0){
+                            if (productImages.size() > 0) {
                                 viewPager.setAdapter(new ProductDetailImageAdapter(ProductDetailActivity.this,
                                         productImages));
 //                                viewPager.setAdapter(new SlidingImageAdapter(ProductDetailActivity.this,
@@ -200,7 +224,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     }
 
     private void onClickListenersInit() {
-//        imgCart.setOnClickListener(this);
+        cardFav.setOnClickListener(this);
         imgBack.setOnClickListener(this);
         txtAddToCart.setOnClickListener(this);
         txtDealNow.setOnClickListener(this);
@@ -279,6 +303,19 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                 onBackPressed();
                 break;
 
+            case R.id.cardFav:
+                if (product.isFav() == true) {
+                    dataProcessor = new DataProcessor(this);
+                    dataProcessor.removeFromFavArrayList("favorite", product);
+                    product.setFav(false);
+//                    notifyItemChanged(position);
+//                    notifyDataSetChanged();
+                } else {
+                    addProductToFavorite();
+
+                }
+                break;
+
             case R.id.txtAddToCart:
                 if (dataProcessor.getArrayList("cart") != null) {
                     if (!Common.containsProduct(dataProcessor.getArrayList("cart"),
@@ -286,7 +323,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                         cartProductList = dataProcessor.getArrayList("cart");
                         cartProductListPojo = new CartProductListPojo(
                                 name,
-                                desc, qty+"", stock, price, in_date, type, id, selUnit, piecesPerCartoon);
+                                desc, qty + "", stock, price, in_date, type, id, selUnit, piecesPerCartoon);
                         cartProductList.add(cartProductListPojo);
                         dataProcessor.saveArrayList(cartProductList, "cart");
                         Toast.makeText(ProductDetailActivity.this, "Your product added to cart", Toast.LENGTH_LONG).show();
@@ -296,12 +333,12 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                     }
                 } else {
                     cartProductList = dataProcessor.getArrayList("cart");
-                    if(cartProductList==null){
+                    if (cartProductList == null) {
                         cartProductList = new ArrayList<>();
                     }
                     cartProductListPojo = new CartProductListPojo(
                             name,
-                            desc, qty+"", stock, price, in_date, type, id, selUnit, piecesPerCartoon);
+                            desc, qty + "", stock, price, in_date, type, id, selUnit, piecesPerCartoon);
                     cartProductList.add(cartProductListPojo);
                     dataProcessor.saveArrayList(cartProductList, "cart");
                     Toast.makeText(ProductDetailActivity.this, "Your product added to cart", Toast.LENGTH_LONG).show();
@@ -313,7 +350,8 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
 
             case R.id.txtDealNow:
 //                addProductForOrdering();
-                 goToDealPageListing();
+//                 goToDealPageListing();
+                openDialog(product);
                 break;
 
             case R.id.btnDecreaseQty:
@@ -355,7 +393,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         data.put("qty", "" + qty);
         data.put("total_price", "₹ " + (Long.parseLong(price.trim().toString()) * qty) + "");
         data.put("user", "");
-        data.put("order_no", "DIO_"+String.valueOf(getOrderListSize()+1));
+        data.put("order_no", "DIO_" + String.valueOf(getOrderListSize() + 1));
 
 
         db.collection("orderlist")
@@ -377,4 +415,183 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                 });
 
     }
+
+    private void openDialog(ProductListPojo product) {
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.dialog_bottom_sheet);
+
+        ImageView imgProduct = bottomSheetDialog.findViewById(R.id.imgProduct);
+        TextView tvTitle = bottomSheetDialog.findViewById(R.id.tvTitle);
+        TextView tvPrice = bottomSheetDialog.findViewById(R.id.tvPrice);
+        TextView tvCartoon = bottomSheetDialog.findViewById(R.id.tvCartoon);
+        TextView tvStock = bottomSheetDialog.findViewById(R.id.tvStock);
+        TextView txt_TotalCartoons = bottomSheetDialog.findViewById(R.id.txt_TotalCartoons);
+        TextView txt_TotalAmt = bottomSheetDialog.findViewById(R.id.txt_TotalAmt);
+        EditText etReqCartoon = bottomSheetDialog.findViewById(R.id.etReqCartoon);
+        EditText etReqAmt = bottomSheetDialog.findViewById(R.id.etReqAmt);
+        TextView tvAddDeal = bottomSheetDialog.findViewById(R.id.tvAddDeal);
+        ImageView imgClose = bottomSheetDialog.findViewById(R.id.imgClose);
+
+        tvTitle.setText(product.getName());
+        tvCartoon.setText(product.getTvPiecesPerCartoon() + " /Cartoons");
+        tvStock.setText(product.getTvStock() + " in stocks");
+        tvPrice.setText("₹ " + product.getTvPrice());
+
+        if (product.getListProductImages().size() > 0) {
+            Glide
+                    .with(this)
+                    .load(product.getListProductImages().get(0))
+                    .centerCrop()
+//                .placeholder(R.drawable.loading_spinner)
+                    .into(imgProduct);
+        }
+        etReqCartoon.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if (s.length() != 0) {
+                    txt_TotalCartoons.setText(String.valueOf(Integer.parseInt(product.getTvPiecesPerCartoon()) *
+                            Integer.parseInt(etReqCartoon.getText().toString())));
+                }
+
+            }
+        });
+        etReqAmt.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if (s.length() != 0) {
+                    txt_TotalAmt.setText("₹ " + String.valueOf(Integer.parseInt(product.getTvPiecesPerCartoon()) *
+                            Integer.parseInt(etReqAmt.getText().toString())
+                            * Integer.parseInt(etReqCartoon.getText().toString())));
+                }
+            }
+        });
+        tvAddDeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataProcessor = new DataProcessor(ProductDetailActivity.this);
+                if (etReqCartoon.getText().toString().length() == 0) {
+                    Toast.makeText(ProductDetailActivity.this, "Add cartoon first", Toast.LENGTH_LONG).show();
+                } else if (etReqAmt.getText().toString().length() == 0) {
+                    Toast.makeText(ProductDetailActivity.this, "Add amount to deal first", Toast.LENGTH_LONG).show();
+                } else {
+                    if (dataProcessor.getBool("isLogin") == true) {
+                        addDealToFireStore(etReqCartoon.getText().toString(),
+                                etReqAmt.getText().toString(), product.getId(), bottomSheetDialog);
+
+                    } else {
+                        bottomSheetDialog.dismiss();
+                        Toast.makeText(ProductDetailActivity.this, "You need to login first..", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(ProductDetailActivity.this, LoginActivity.class));
+                        finishAffinity();
+                    }
+                }
+
+
+            }
+        });
+        imgClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+        bottomSheetDialog.show();
+
+    }
+
+    public void addDealToFireStore(String reqCartoon, String dealAmt, String product_id,
+                                   BottomSheetDialog bottomSheetDialog) {
+        pd.show();
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("user", dataProcessor.getStr("phone"));
+        docData.put("product_id", product_id);
+        docData.put("cartoon", reqCartoon);
+        docData.put("deal_amount", dealAmt);
+        docData.put("status", "pending");
+
+        Calendar c = Calendar.getInstance();
+        System.out.println("Current time => " + c.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String currentDate = df.format(c.getTime());
+
+        docData.put("deal_in_date", currentDate);
+
+        db.collection("deallist").document("DOD_" + dataProcessor.getStr("phone") + "_" + product_id)
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(ProductDetailActivity.this, "Your deal request success..", Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                        bottomSheetDialog.dismiss();
+                        Log.d(TAG, "Deal successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ProductDetailActivity.this, "Failed to deal..", Toast.LENGTH_LONG).show();
+
+                        pd.dismiss();
+                        bottomSheetDialog.dismiss();
+                        Log.w(TAG, "Error writing deal", e);
+                    }
+                });
+    }
+
+    public void addProductToFavorite() {
+        if (dataProcessor.getFavoriteArrayList("favorite") != null) {
+            if (!Common.containsFavoriteProduct(dataProcessor.getFavoriteArrayList("favorite"),
+                    product.getName())) {
+                productFavArrayList = dataProcessor.getFavoriteArrayList("favorite");
+
+                product.setFav(true);
+                productFavArrayList.add(product);
+                imgLike.setBackgroundResource(R.drawable.ic_fav_selected);
+                dataProcessor.saveFavoriteArrayList(productFavArrayList, "favorite");
+                listAdapter.notifyDataSetChanged();
+                Toast.makeText(ProductDetailActivity.this, "Your product added to favorite", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Product already added to favorite", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            productFavArrayList = dataProcessor.getFavoriteArrayList("favorite");
+            if (productFavArrayList == null) {
+                productFavArrayList = new ArrayList<>();
+            }
+            product.setFav(true);
+            productFavArrayList.add(product);
+            dataProcessor.saveFavoriteArrayList(productFavArrayList, "favorite");
+            listAdapter.notifyDataSetChanged();
+            Toast.makeText(ProductDetailActivity.this, "Your product added to favorite", Toast.LENGTH_LONG).show();
+
+
+        }
+    }
+
 }

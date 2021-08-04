@@ -130,6 +130,7 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/buy_btn_bg"
             android:layout_below="@+id/tvPrice"/>
+
         <TextView
             android:id="@+id/btnAddToFav"
             android:layout_width="30dp"

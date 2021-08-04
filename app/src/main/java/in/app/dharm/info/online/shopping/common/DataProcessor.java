@@ -95,6 +95,7 @@ public class DataProcessor {
         String json = gson.toJson(list);
         editor.putString(key, json);
         editor.apply();
+//        editor.commit();
 
     }
 
@@ -106,17 +107,36 @@ public class DataProcessor {
         return gson.fromJson(json, type);
     }
 
-    public void removeFromFavArrayList(ArrayList<ProductListPojo> list, String key, ProductListPojo product){
+    public void removeFromFavArrayList(String key, ProductListPojo product){
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = prefs.edit();
-        list.remove(product);
-        saveFavoriteArrayList(list, "favorite");
-        Gson gson = new Gson();
-        String json = gson.toJson(list);
-        editor.putString(key, json);
-        editor.apply();
-        editor.commit();
+        getFavoriteArrayList("favorite").remove(product);
+//        list.remove(product);
+//        editor.remove(key).apply();
+        saveFavoriteArrayList(getFavoriteArrayList("favorite"), "favorite");
+//        Gson gson = new Gson();
+//        String json = gson.toJson(getFavoriteArrayList("favorite"));
+//        editor.putString(key, json);
+//        editor.apply();
+//        editor.commit();
 
     }
+
+    public void removeFromFavArrayList(String key, ProductListPojo product, int position){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = prefs.edit();
+//        getFavoriteArrayList("favorite").remove(product);
+        getFavoriteArrayList("favorite").remove(position);
+//        list.remove(product);
+//        editor.remove(key).apply();
+        saveFavoriteArrayList(getFavoriteArrayList("favorite"), "favorite");
+//        Gson gson = new Gson();
+//        String json = gson.toJson(getFavoriteArrayList("favorite"));
+//        editor.putString(key, json);
+//        editor.apply();
+//        editor.commit();
+
+    }
+
 
 }

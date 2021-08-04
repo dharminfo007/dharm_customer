@@ -17,8 +17,11 @@ public class ProductListPojo implements Serializable {
     String tvOfferDisc;
     String type;
     String id;
-    boolean isFav = false;
+    boolean isFav ;
     public ArrayList<String> listProductImages;
+
+    public ProductListPojo() {
+    }
 
     public ProductListPojo(String name, String tvDesc, String tvPiecesPerCartoon, String tvStock,
                            String tvPrice,

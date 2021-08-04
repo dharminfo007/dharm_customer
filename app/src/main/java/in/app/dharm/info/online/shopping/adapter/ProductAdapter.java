@@ -2,6 +2,7 @@ package in.app.dharm.info.online.shopping.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +31,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
 
     // List to store all the contact details
     public ArrayList<ProductListPojo> productList;
+    public ArrayList<ProductListPojo> favList;
     private Context mContext;
     DataProcessor dataProcessor;
 
-    // Counstructor for the Class
-    public ProductAdapter(ArrayList<ProductListPojo> contactsList, Context context) {
+    // Constructor for the Class
+    public ProductAdapter(ArrayList<ProductListPojo> contactsList, ArrayList<ProductListPojo> favList,
+                          Context context) {
         this.productList = contactsList;
         this.mContext = context;
+        this.favList = favList;
     }
 
     // This method creates views for the RecyclerView by inflating the layout
@@ -92,9 +96,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             public void onClick(View v) {
                 if(product.isFav() == true){
                     dataProcessor = new DataProcessor(mContext);
-                    dataProcessor.getFavoriteArrayList("favorite").remove(product);
-                    dataProcessor.saveFavoriteArrayList(dataProcessor.getFavoriteArrayList("favorite"), "favorite");
-                    productList.get(position).setFav(false);
+                    dataProcessor.getFavoriteArrayList("favorite").remove(productList.get(position));
+                    dataProcessor.saveFavoriteArrayList(dataProcessor.getFavoriteArrayList("favorite"),
+                            "favorite");
+                    product.setFav(false);
                     notifyDataSetChanged();
                 }else {
                     if (mContext instanceof ProductListingActivity) {
@@ -123,7 +128,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
     public class ContactHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTitle, btnAddToFav, tvCartoon, tvStock, tvPrice;
-//        CardView cardProducts;
         ImageView imgProduct;
 
         public ContactHolder(View itemView) {
@@ -134,8 +138,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             tvCartoon = itemView.findViewById(R.id.tvCartoon);
             tvStock = itemView.findViewById(R.id.tvStock);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-//            tvOfferDisc = itemView.findViewById(R.id.tvOfferDisc);
-//            cardProducts = itemView.findViewById(R.id.cardProducts);
             imgProduct = itemView.findViewById(R.id.imgProduct);
 
         }
@@ -144,9 +146,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             tvTitle.setText(title);
         }
 
-//        public void setProductDesc(String desc) {
-//            tvDesc.setText(desc);
-//        }
 
         public void setProductCartoon(String cartoon) {
             tvCartoon.setText(cartoon);
@@ -159,9 +158,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
         public void setProductPrice(String price) {
             tvPrice.setText(price);
         }
-//        public void setProductOfferDisc(String offerDisc) {
-//            tvOfferDisc.setText(offerDisc);
-//        }
+
     }
 
     public void updateList(ArrayList<ProductListPojo> list) {
