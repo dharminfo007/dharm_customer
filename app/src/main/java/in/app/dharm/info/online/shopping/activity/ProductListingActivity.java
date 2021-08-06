@@ -98,7 +98,6 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
         onClickListenersInit();
         filterAdapter.selectedPos = -1;
         filterAdapter.notifyDataSetChanged();
-        initProductDataAvailability();
         initFilterDataAvailability();
         findProducts();
         imgCart.setOnClickListener(this);
@@ -144,7 +143,7 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                             productArrayList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                ProductListPojo productListPojo = new ProductListPojo(document.getString("name"),
+                                productListPojo = new ProductListPojo(document.getString("name"),
                                         document.getString("description"), document.getString("pieces per cartoon"),
                                         document.getString("stock"),
                                         document.getString("price"), document.getString("in_date"),
@@ -235,6 +234,13 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
                                             document.getString("price"), document.getString("in_date"),
                                             document.getString("type"),document.getString("id"),(ArrayList<String>) document.get("images"));
 
+                                    if(dataProcessor.getFavoriteArrayList("favorite") != null){
+                                        for(int i = 0; i< dataProcessor.getFavoriteArrayList("favorite").size(); i++){
+                                            if(dataProcessor.getFavoriteArrayList("favorite").get(i).getId().equals(document.getString("id"))){
+                                                productListPojo.setFav(true);
+                                            }
+                                        }
+                                    }
                                     productArrayList.add(productListPojo);
 
                                 }
@@ -359,5 +365,9 @@ public class ProductListingActivity extends AppCompatActivity implements View.On
         }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initProductDataAvailability();
+    }
 }

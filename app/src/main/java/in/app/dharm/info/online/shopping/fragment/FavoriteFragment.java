@@ -2,30 +2,18 @@ package in.app.dharm.info.online.shopping.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
-
 import in.app.dharm.info.online.shopping.R;
-import in.app.dharm.info.online.shopping.activity.CartProductsActivity;
-import in.app.dharm.info.online.shopping.adapter.CartAdapter;
 import in.app.dharm.info.online.shopping.adapter.FavListAdapter;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
-import in.app.dharm.info.online.shopping.model.CartProductListPojo;
-import in.app.dharm.info.online.shopping.model.GenerateOrderPojo;
 import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
 /**

@@ -5,11 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -72,7 +77,14 @@ public class CartFragmentAdapter extends RecyclerView.Adapter<CartFragmentAdapte
         }
         holder.setProductQty(cartProductPojo.getTvQty());
 //        holder.setProductOfferDisc(contact.getTvOfferDisc());
-
+        if (cartProductPojo.getProductImages().size() > 0) {
+            Glide
+                    .with(mContext)
+                    .load(cartProductPojo.getProductImages().get(0))
+                    .centerCrop()
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
+                    .into(holder.imgProduct);
+        }
         holder.btnIncreaseQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +138,7 @@ public class CartFragmentAdapter extends RecyclerView.Adapter<CartFragmentAdapte
                 btnIncreaseQty, tvQty;
         CardView cardProducts;
         FrameLayout imgClose;
-
+        ImageView imgProduct;
         public CartHolder(View itemView) {
             super(itemView);
 
@@ -140,7 +152,7 @@ public class CartFragmentAdapter extends RecyclerView.Adapter<CartFragmentAdapte
             btnIncreaseQty = itemView.findViewById(R.id.btnIncreaseQty);
             tvQty = itemView.findViewById(R.id.tvQty);
             imgClose = itemView.findViewById(R.id.imgClose);
-
+            imgProduct = itemView.findViewById(R.id.imgProduct);
         }
 
         public void setProductTitle(String title) {

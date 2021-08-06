@@ -88,6 +88,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     ProductListPojo product;
     CardView cardFav;
     ArrayList<ProductListPojo> productFavArrayList;
+    boolean isFav;
 
 
     @Override
@@ -100,6 +101,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
 
     public void init() {
         id = getIntent().getStringExtra("id");
+        isFav = getIntent().getBooleanExtra("favorite", false);
         db = FirebaseFirestore.getInstance();
         dataProcessor = new DataProcessor(this);
 
@@ -188,6 +190,11 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                                 tvStockStatus.setText(document.getString("stock") + " in stocks");
                             } else {
                                 tvStockStatus.setText("OUT OF STOCK");
+                            }
+                            if(isFav == true){
+                                imgLike.setBackgroundResource(R.drawable.ic_fav_selected);
+                            }else {
+                                imgLike.setBackgroundResource(R.drawable.ic_fav);
                             }
                             tvPrice.setText("₹ " + document.getString("price"));
                             groupImages = (ArrayList<String>) document.get("images");
@@ -323,7 +330,8 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                         cartProductList = dataProcessor.getArrayList("cart");
                         cartProductListPojo = new CartProductListPojo(
                                 name,
-                                desc, qty + "", stock, price, in_date, type, id, selUnit, piecesPerCartoon);
+                                desc, qty + "", stock, price, in_date, type, id, selUnit, piecesPerCartoon,
+                                productImages);
                         cartProductList.add(cartProductListPojo);
                         dataProcessor.saveArrayList(cartProductList, "cart");
                         Toast.makeText(ProductDetailActivity.this, "Your product added to cart", Toast.LENGTH_LONG).show();
@@ -338,7 +346,8 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                     }
                     cartProductListPojo = new CartProductListPojo(
                             name,
-                            desc, qty + "", stock, price, in_date, type, id, selUnit, piecesPerCartoon);
+                            desc, qty + "", stock, price, in_date, type, id, selUnit, piecesPerCartoon,
+                            productImages);
                     cartProductList.add(cartProductListPojo);
                     dataProcessor.saveArrayList(cartProductList, "cart");
                     Toast.makeText(ProductDetailActivity.this, "Your product added to cart", Toast.LENGTH_LONG).show();
@@ -577,7 +586,10 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                 listAdapter.notifyDataSetChanged();
                 Toast.makeText(ProductDetailActivity.this, "Your product added to favorite", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Product already added to favorite", Toast.LENGTH_SHORT).show();
+                dataProcessor.removeFromFavArrayList("favorite", product);
+                product.setFav(false);
+                imgLike.setBackgroundResource(R.drawable.ic_fav);
+//                Toast.makeText(this, "Product already added to favorite", Toast.LENGTH_SHORT).show();
             }
         } else {
             productFavArrayList = dataProcessor.getFavoriteArrayList("favorite");

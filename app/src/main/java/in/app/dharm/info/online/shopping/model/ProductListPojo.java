@@ -24,8 +24,24 @@ public class ProductListPojo implements Serializable {
     }
 
     public ProductListPojo(String name, String tvDesc, String tvPiecesPerCartoon, String tvStock,
+                           String tvPrice, String in_date, String type, String id,
+                           ArrayList<String> listProductImages) {
+        this.name = name;
+        this.tvDesc = tvDesc;
+        this.tvPiecesPerCartoon = tvPiecesPerCartoon;
+        this.tvStock = tvStock;
+        this.tvPrice = tvPrice;
+        this.in_date = in_date;
+        this.tvOfferDisc = tvOfferDisc;
+        this.type = type;
+        this.id = id;
+        this.listProductImages = listProductImages;
+    }
+
+    public ProductListPojo(String name, String tvDesc, String tvPiecesPerCartoon, String tvStock,
                            String tvPrice,
-                           String in_date, String type, String id, ArrayList<String> listProductImages) {
+                           String in_date, String type, String id, ArrayList<String> listProductImages,
+                           boolean isFav) {
         this.name = name;
         this.tvDesc = tvDesc;
         this.tvPiecesPerCartoon = tvPiecesPerCartoon;
@@ -35,6 +51,7 @@ public class ProductListPojo implements Serializable {
         this.type = type;
         this.id = id;
         this.listProductImages = listProductImages;
+        this.isFav = isFav;
     }
 
     public String getTvDesc() {

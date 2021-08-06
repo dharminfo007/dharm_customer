@@ -108,18 +108,14 @@ public class DataProcessor {
     }
 
     public void removeFromFavArrayList(String key, ProductListPojo product){
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = prefs.edit();
+        ArrayList<ProductListPojo> list = getFavoriteArrayList("favorite");
         getFavoriteArrayList("favorite").remove(product);
-//        list.remove(product);
-//        editor.remove(key).apply();
-        saveFavoriteArrayList(getFavoriteArrayList("favorite"), "favorite");
-//        Gson gson = new Gson();
-//        String json = gson.toJson(getFavoriteArrayList("favorite"));
-//        editor.putString(key, json);
-//        editor.apply();
-//        editor.commit();
-
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getId().equals(product.getId())){
+                list.remove(i);
+                saveFavoriteArrayList(list, "favorite");
+            }
+        }
     }
 
     public void removeFromFavArrayList(String key, ProductListPojo product, int position){

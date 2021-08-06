@@ -1,5 +1,7 @@
 package in.app.dharm.info.online.shopping.model;
 
+import java.util.ArrayList;
+
 public class CartProductListPojo {
 
     String name;
@@ -13,10 +15,12 @@ public class CartProductListPojo {
     String id;
     String unit;
     String piecesPerCartoon;
+    ArrayList<String> productImages;
 
     public CartProductListPojo(String name, String tvDesc, String tvQty, String tvStock,
                            String tvPrice,
-                           String in_date, String type, String id, String unit, String piecesPerCartoon) {
+                           String in_date, String type, String id, String unit, String piecesPerCartoon,
+                               ArrayList<String> productImages) {
         this.name = name;
         this.tvDesc = tvDesc;
         this.tvQty = tvQty;
@@ -27,6 +31,7 @@ public class CartProductListPojo {
         this.id = id;
         this.unit = unit;
         this.piecesPerCartoon = piecesPerCartoon;
+        this.productImages = productImages;
     }
 
     public String getTvDesc() {
@@ -115,5 +120,13 @@ public class CartProductListPojo {
 
     public void setPiecesPerCartoon(String piecesPerCartoon) {
         this.piecesPerCartoon = piecesPerCartoon;
+    }
+
+    public ArrayList<String> getProductImages() {
+        return productImages;
+    }
+
+    public void setProductImages(ArrayList<String> productImages) {
+        this.productImages = productImages;
     }
 }

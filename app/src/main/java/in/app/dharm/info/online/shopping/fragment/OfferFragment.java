@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.app.dharm.info.online.shopping.R;
-import in.app.dharm.info.online.shopping.activity.LoginActivity;
 import in.app.dharm.info.online.shopping.adapter.CartFragmentAdapter;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
 import in.app.dharm.info.online.shopping.model.CartProductListPojo;

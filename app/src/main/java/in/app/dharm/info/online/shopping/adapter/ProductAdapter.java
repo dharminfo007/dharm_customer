@@ -87,6 +87,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             public void onClick(View v) {
                 Intent i = new Intent(mContext, ProductDetailActivity.class);
                 i.putExtra("id", product.getId());
+                i.putExtra("favorite", product.isFav());
                 mContext.startActivity(i);
             }
         });
@@ -96,6 +97,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
             public void onClick(View v) {
                 if(product.isFav() == true){
                     dataProcessor = new DataProcessor(mContext);
+                    dataProcessor.removeFromFavArrayList("favorite", product);
                     dataProcessor.getFavoriteArrayList("favorite").remove(productList.get(position));
                     dataProcessor.saveFavoriteArrayList(dataProcessor.getFavoriteArrayList("favorite"),
                             "favorite");
