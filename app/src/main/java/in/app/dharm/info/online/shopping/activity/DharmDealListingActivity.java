@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -283,7 +285,7 @@ public class DharmDealListingActivity extends AppCompatActivity implements View.
         listAdapter.updateList(temp);
     }
 
-    public void addDealToFireStore(String reqCartoon, String dealAmt, String product_id) {
+    public void addDealToFireStore(BottomSheetDialog bottomSheetDialog, String reqCartoon, String dealAmt, String product_id) {
         pd.show();
 
         Map<String, Object> docData = new HashMap<>();
@@ -308,6 +310,12 @@ public class DharmDealListingActivity extends AppCompatActivity implements View.
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Log.d(TAG, "Deal successfully written!");
+                        Toast.makeText(DharmDealListingActivity.this,
+                                "Your deal requested successfully", Toast.LENGTH_SHORT).show();
+                        if(bottomSheetDialog != null){
+                            bottomSheetDialog.dismiss();
+                        }
+//                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

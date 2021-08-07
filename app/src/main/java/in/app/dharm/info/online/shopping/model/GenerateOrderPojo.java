@@ -2,13 +2,14 @@ package in.app.dharm.info.online.shopping.model;
 
 public class GenerateOrderPojo {
 
-    String id, qty, price, in_date, unit;
+    String id, name, qty, price, in_date, unit;
 
     public GenerateOrderPojo() {
     }
 
-    public GenerateOrderPojo(String id, String qty, String price, String in_date, String unit) {
+    public GenerateOrderPojo(String id, String name, String qty, String price, String in_date, String unit) {
         this.id = id;
+        this.name = name;
         this.qty = qty;
         this.price = price;
         this.in_date = in_date;
@@ -53,5 +54,13 @@ public class GenerateOrderPojo {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -148,6 +148,8 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         tvOrderTotal.setText("Order Total ");
 
         txtBuyNow.setOnClickListener(this);
+        getOrderListSize();
+
         return mView;
     }
 
@@ -213,26 +215,34 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         GenerateOrderPojo ordersListPojo = new GenerateOrderPojo();
         Map<String, Object> docData = new HashMap<>();
         docData.put("user", dataProcessor.getStr("phone"));
-        docData.put("order_total", grandTotal(productCartList));
+        docData.put("order_total", grandTotal(productCartList)+"");
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String currentDate = df.format(c.getTime());
         for (int i = 0; i < productCartList.size(); i++) {
-            ordersListPojo = new GenerateOrderPojo(productCartList.get(i).getId(), productCartList.get(i).getTvQty(),
+            ordersListPojo = new GenerateOrderPojo(productCartList.get(i).getId(),
+                    productCartList.get(i).getName(),
+                    productCartList.get(i).getTvQty(),
                     productCartList.get(i).getTvPrice(), currentDate, productCartList.get(i).getUnit());
             orderList.add(ordersListPojo);
         }
         docData.put("products", orderList);
 
 
-        db.collection("orderlist").document("DIO_" + String.valueOf(getOrderListSize() + 1))
+        db.collection("orderlist").document("DIO_" + String.valueOf(orderSize + 1))
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
+                        productCartList.clear();
+                        dataProcessor.getArrayList("cart").clear();
+                        dataProcessor.saveArrayList(productCartList, "cart");
+                        grandTotal(productCartList);
+                        listAdapter.notifyDataSetChanged();
+                        checkCartList();
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })

@@ -17,6 +17,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -111,6 +112,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mView = inflater.inflate(R.layout.fragment_home, container, false);
         bannerArrayList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
+
         llProducts = mView.findViewById(R.id.llProducts);
         txtProductCount = mView.findViewById(R.id.txtProductCount);
         videoOnLaunch = mView.findViewById(R.id.videoOnLaunch);

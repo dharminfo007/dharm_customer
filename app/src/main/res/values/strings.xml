@@ -21,6 +21,7 @@
     <string name="txt_abt_product">Add Product :</string>
     <string name="font_combi">combi_sanse_medium</string>
     <string name="txt_no_data_found">No product found</string>
+    <string name="txt_no_order_data_found">No order found</string>
     <string name="txt_logout">LOGOUT</string>
     <string name="txt_add_deal">ADD DEAL</string>
 </resources>

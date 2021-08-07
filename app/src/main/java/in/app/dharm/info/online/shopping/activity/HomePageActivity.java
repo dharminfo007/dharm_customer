@@ -7,6 +7,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -71,6 +74,7 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
     DrawerLayout navDrawer;
     NavigationView navigationView;
     Button btn_sign_out;
+    int k = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -296,8 +300,14 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         if (navDrawer.isDrawerOpen(GravityCompat.START)) {
             navDrawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            k++;
+            if (k == 1) {
+                Toast.makeText(HomePageActivity.this, "Please press again to exit application..", Toast.LENGTH_SHORT).show();
+            } else {
+                finish();
+            }
         }
     }
+
 
 }

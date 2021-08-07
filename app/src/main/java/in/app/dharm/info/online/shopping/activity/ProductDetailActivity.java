@@ -558,6 +558,9 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                         Toast.makeText(ProductDetailActivity.this, "Your deal request success..", Toast.LENGTH_LONG).show();
                         pd.dismiss();
                         bottomSheetDialog.dismiss();
+                        Toast.makeText(ProductDetailActivity.this,
+                                "Your deal requested successfully", Toast.LENGTH_SHORT).show();
+                        finish();
                         Log.d(TAG, "Deal successfully written!");
                     }
                 })

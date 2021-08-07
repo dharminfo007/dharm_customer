@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ContactHol
     // List to store all the contact details
     public ArrayList<OrdersListPojo> orderList;
     private Context mContext;
+    ProductListAdapter listAdapter;
 
     // Counstructor for the Class
     public OrdersAdapter(ArrayList<OrdersListPojo> orderList, Context context) {
@@ -49,11 +51,14 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ContactHol
     @Override
     public void onBindViewHolder(@NonNull OrdersAdapter.ContactHolder holder, final int position) {
         final OrdersListPojo ordersListPojo = orderList.get(position);
-        holder.tvProdName.setText(ordersListPojo.getName());
-        holder.tvProdId.setText(ordersListPojo.getId());
-        holder.tvQty.setText("₹ " +String.valueOf(Integer.parseInt(ordersListPojo.getQty()) * Integer.parseInt(ordersListPojo.getPrice())));
+        holder.tvOrderId.setText(ordersListPojo.getOrderId());
+        holder.tvOrderTotal.setText("Total price : "+"₹ " +ordersListPojo.getTotal_price());
 
-
+        holder.rvProductItems.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false);
+        holder.rvProductItems.setLayoutManager(layoutManager);
+        listAdapter = new ProductListAdapter(ordersListPojo.getHashMaps(), mContext);
+        holder.rvProductItems.setAdapter(listAdapter);
         // You can set click listners to indvidual items in the viewholder here
         // make sure you pass down the listner or make the Data members of the viewHolder public
 
@@ -62,15 +67,15 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ContactHol
     // This is your ViewHolder class that helps to populate data to the view
     public class ContactHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvTotalPrice, tvQty, tvProdId, tvProdName;
+        private TextView tvOrderId, tvOrderTotal;
+        RecyclerView rvProductItems;
 
         public ContactHolder(View itemView) {
             super(itemView);
 
-            tvTotalPrice = itemView.findViewById(R.id.tvTotalPrice);
-            tvQty = itemView.findViewById(R.id.tvQty);
-            tvProdId = itemView.findViewById(R.id.tvProdId);
-            tvProdName = itemView.findViewById(R.id.tvProdName);
+            tvOrderId = itemView.findViewById(R.id.tvOrderId);
+            tvOrderTotal = itemView.findViewById(R.id.tvOrderTotal);
+            rvProductItems = itemView.findViewById(R.id.rvProductItems);
 
         }
 

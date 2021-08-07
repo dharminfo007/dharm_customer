@@ -94,7 +94,7 @@ public class OfferFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_cart, container, false);
+        mView = inflater.inflate(R.layout.fragment_offer, container, false);
         pd = new ProgressDialog(getActivity());
         pd.setMessage("loading...");
         return mView;

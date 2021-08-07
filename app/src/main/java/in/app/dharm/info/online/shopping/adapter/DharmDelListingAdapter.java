@@ -181,7 +181,7 @@ public class DharmDelListingAdapter extends RecyclerView.Adapter<DharmDelListing
                 }else {
                     if (dataProcessor.getBool("isLogin") == true) {
                         if (mContext instanceof DharmDealListingActivity) {
-                            ((DharmDealListingActivity) mContext).addDealToFireStore(etReqCartoon.getText().toString(),
+                            ((DharmDealListingActivity) mContext).addDealToFireStore(bottomSheetDialog, etReqCartoon.getText().toString(),
                                     etReqAmt.getText().toString(), product.getId());
                         }
                     } else {

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,11 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
 import in.app.dharm.info.online.shopping.R;
 import in.app.dharm.info.online.shopping.adapter.CartAdapter;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
@@ -63,7 +67,7 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
 
         cartList = new ArrayList<>();
         orderList = new ArrayList<>();
-        rvProducts  = findViewById(R.id.rvCartProducts);
+        rvProducts = findViewById(R.id.rvCartProducts);
         imgBack = findViewById(R.id.imgBack);
         tvOrderPrice = findViewById(R.id.tvOrderPrice);
         tvOrderTotal = findViewById(R.id.tvOrderTotal);
@@ -82,12 +86,12 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
         //Load the date from the network or other resources
         //into the array list asynchronously
 
-        if(dataProcessor.getArrayList("cart") != null && dataProcessor.getArrayList("cart").size() > 0){
+        if (dataProcessor.getArrayList("cart") != null && dataProcessor.getArrayList("cart").size() > 0) {
             cartList = dataProcessor.getArrayList("cart");
             listAdapter = new CartAdapter(cartList, this);
             rvProducts.setAdapter(listAdapter);
             listAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             checkCartList();
         }
 
@@ -96,6 +100,8 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
         grandTotal(cartList);
 
         tvOrderTotal.setText("Order Total ");
+        getOrderListSize();
+
     }
 
     @Override
@@ -124,26 +130,33 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
         GenerateOrderPojo ordersListPojo = new GenerateOrderPojo();
         Map<String, Object> docData = new HashMap<>();
         docData.put("user", dataProcessor.getStr("phone"));
-        docData.put("order_total", grandTotal(cartList)+"");
+        docData.put("order_total", grandTotal(cartList) + "");
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String currentDate = df.format(c.getTime());
-        for(int i=0; i<cartList.size(); i++){
-            ordersListPojo = new GenerateOrderPojo(cartList.get(i).getId(), cartList.get(i).getTvQty(),
+        for (int i = 0; i < cartList.size(); i++) {
+            ordersListPojo = new GenerateOrderPojo(cartList.get(i).getId(), cartList.get(i).getName(),
+                    cartList.get(i).getTvQty(),
                     cartList.get(i).getTvPrice(), currentDate, cartList.get(i).getUnit());
             orderList.add(ordersListPojo);
         }
         docData.put("products", orderList);
 
 
-        db.collection("orderlist").document("DIO_"+String.valueOf(getOrderListSize()+1))
+        db.collection("orderlist").document("DIO_" + String.valueOf(orderSize + 1) + "")
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
+                        cartList.clear();
+                        dataProcessor.getArrayList("cart").clear();
+                        dataProcessor.saveArrayList(cartList, "cart");
+                        grandTotal(cartList);
+                        listAdapter.notifyDataSetChanged();
+                        checkCartList();
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
@@ -156,22 +169,22 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
                 });
     }
 
-    public int grandTotal(ArrayList<CartProductListPojo> items){
+    public int grandTotal(ArrayList<CartProductListPojo> items) {
 
         int totalPrice = 0;
-        for(int i = 0 ; i < items.size(); i++) {
-            if(items.get(i).getUnit().toLowerCase().equals("cartoon")){
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getUnit().toLowerCase().equals("cartoon")) {
                 totalPrice += Integer.parseInt(items.get(i).getTvQty()) *
                         Integer.parseInt(items.get(i).getPiecesPerCartoon()) *
                         Integer.parseInt(items.get(i).getTvPrice());
-            }else {
-                totalPrice +=Integer.parseInt(items.get(i).getTvQty()) *
+            } else {
+                totalPrice += Integer.parseInt(items.get(i).getTvQty()) *
                         Integer.parseInt(items.get(i).getTvPrice());
             }
 
         }
 
-        tvOrderPrice.setText("₹ "+totalPrice+"");
+        tvOrderPrice.setText("₹ " + totalPrice + "");
         return totalPrice;
     }
 
@@ -188,11 +201,11 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void checkCartList() {
-        if(cartList.size() > 0){
+        if (cartList.size() > 0) {
             tvNoCart.setVisibility(View.GONE);
             rvProducts.setVisibility(View.VISIBLE);
             llBottom.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvNoCart.setText("Cart is empty");
             tvNoCart.setVisibility(View.VISIBLE);
             rvProducts.setVisibility(View.GONE);
