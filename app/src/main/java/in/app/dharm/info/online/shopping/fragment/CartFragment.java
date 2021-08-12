@@ -1,15 +1,14 @@
 package in.app.dharm.info.online.shopping.fragment;
 
-import android.app.Activity;
+
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,30 +16,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
 import in.app.dharm.info.online.shopping.R;
-import in.app.dharm.info.online.shopping.activity.DharmDealListingActivity;
 import in.app.dharm.info.online.shopping.activity.LoginActivity;
-import in.app.dharm.info.online.shopping.adapter.CartAdapter;
 import in.app.dharm.info.online.shopping.adapter.CartFragmentAdapter;
-import in.app.dharm.info.online.shopping.adapter.FavListAdapter;
 import in.app.dharm.info.online.shopping.common.DataProcessor;
 import in.app.dharm.info.online.shopping.model.CartProductListPojo;
 import in.app.dharm.info.online.shopping.model.GenerateOrderPojo;
-import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -215,9 +207,12 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         GenerateOrderPojo ordersListPojo = new GenerateOrderPojo();
         Map<String, Object> docData = new HashMap<>();
         docData.put("user", dataProcessor.getStr("phone"));
+        docData.put("order_accepted", "false");
         docData.put("order_total", grandTotal(productCartList)+"");
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
+
+        String orderID = "DIO_" + String.valueOf(orderSize + 1) + "";
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String currentDate = df.format(c.getTime());
@@ -243,6 +238,8 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                         grandTotal(productCartList);
                         listAdapter.notifyDataSetChanged();
                         checkCartList();
+                        Toast.makeText(getActivity(), "Order generated successfully..", Toast.LENGTH_LONG).show();
+                        openSuccessDialog(orderID);
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
@@ -254,7 +251,19 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                     }
                 });
     }
+    private void openSuccessDialog(String orderId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getActivity());
+        View view = layoutInflaterAndroid.inflate(R.layout.order_success_dialog, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
+        TextView tvOrderId = view.findViewById(R.id.tvOrderId);
+        view.findViewById(R.id.tvDone).setOnClickListener(v -> alertDialog.dismiss());
+        tvOrderId.setText(orderId);
+    }
     private long getOrderListSize() {
 
         db.collection("orderlist")

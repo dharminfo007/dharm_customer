@@ -24,4 +24,9 @@
     <string name="txt_no_order_data_found">No order found</string>
     <string name="txt_logout">LOGOUT</string>
     <string name="txt_add_deal">ADD DEAL</string>
+    <string name="txt_done">DONE</string>
+    <string name="txt_order_success">Order Successfully placed</string>
+    <string name="txt_order_id">ORDER ID : </string>
+    <string name="txt_order_payment_mode">Payment Mode : </string>
+    <string name="txt_order_payment_cod">CASH ON DELIVERY</string>
 </resources>

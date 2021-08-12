@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+
+        <ImageView
+            android:id="@+id/imgProduct"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/success" />
+
+            <TextView
+                android:layout_below="@+id/imgProduct"
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:lines="2"
+                android:text="@string/txt_order_success" />
+
+        <TextView
+            android:layout_below="@+id/tvTitle"
+            android:id="@+id/tvOrderIdTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="@string/txt_order_id"
+            android:layout_marginVertical="5dp"/>
+
+        <TextView
+            android:layout_below="@+id/tvOrderIdTitle"
+            android:id="@+id/tvOrderId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="DIO_1"
+            android:layout_marginVertical="5dp"/>
+
+
+        <TextView
+            android:layout_below="@+id/tvOrderId"
+            android:id="@+id/tvOrderPaymentModeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:gravity="center"
+            android:layout_marginVertical="5dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/txt_order_payment_mode" />
+
+        <TextView
+            android:layout_below="@+id/tvOrderPaymentModeTitle"
+            android:id="@+id/tvOrderPaymentMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:lines="2"
+            android:text="@string/txt_order_payment_cod" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/black_btn_bg"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="@string/txt_done"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvOrderPaymentMode"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

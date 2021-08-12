@@ -67,7 +67,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public ContactHolder(View itemView) {
             super(itemView);
 
-            tvOrderId = itemView.findViewById(R.id.tvOrderId);
+//            tvOrderId = itemView.findViewById(R.id.tvOrderId);
             tvName = itemView.findViewById(R.id.tvName);
             tvQty = itemView.findViewById(R.id.tvQty);
             tvUnit = itemView.findViewById(R.id.tvUnit);
