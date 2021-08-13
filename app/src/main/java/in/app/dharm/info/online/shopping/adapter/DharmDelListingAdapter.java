@@ -182,7 +182,7 @@ public class DharmDelListingAdapter extends RecyclerView.Adapter<DharmDelListing
                     if (dataProcessor.getBool("isLogin") == true) {
                         if (mContext instanceof DharmDealListingActivity) {
                             ((DharmDealListingActivity) mContext).addDealToFireStore(bottomSheetDialog, etReqCartoon.getText().toString(),
-                                    etReqAmt.getText().toString(), product.getId());
+                                    etReqAmt.getText().toString(), product.getId(), product.getName());
                         }
                     } else {
                         Toast.makeText(mContext, "You need to login first..", Toast.LENGTH_LONG).show();

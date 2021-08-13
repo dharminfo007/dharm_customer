@@ -508,7 +508,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
                 } else {
                     if (dataProcessor.getBool("isLogin") == true) {
                         addDealToFireStore(etReqCartoon.getText().toString(),
-                                etReqAmt.getText().toString(), product.getId(), bottomSheetDialog);
+                                etReqAmt.getText().toString(), product.getId(), bottomSheetDialog, product.getName());
 
                     } else {
                         bottomSheetDialog.dismiss();
@@ -532,7 +532,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
     }
 
     public void addDealToFireStore(String reqCartoon, String dealAmt, String product_id,
-                                   BottomSheetDialog bottomSheetDialog) {
+                                   BottomSheetDialog bottomSheetDialog, String name) {
         pd.show();
 
         Map<String, Object> docData = new HashMap<>();
@@ -541,6 +541,7 @@ public class ProductDetailActivity extends AppCompatActivity implements AdapterV
         docData.put("cartoon", reqCartoon);
         docData.put("deal_amount", dealAmt);
         docData.put("status", "pending");
+        docData.put("product_name", name+"");
 
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());

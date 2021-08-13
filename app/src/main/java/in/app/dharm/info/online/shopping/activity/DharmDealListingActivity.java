@@ -285,7 +285,8 @@ public class DharmDealListingActivity extends AppCompatActivity implements View.
         listAdapter.updateList(temp);
     }
 
-    public void addDealToFireStore(BottomSheetDialog bottomSheetDialog, String reqCartoon, String dealAmt, String product_id) {
+    public void addDealToFireStore(BottomSheetDialog bottomSheetDialog, String reqCartoon,
+                                   String dealAmt, String product_id, String name) {
         pd.show();
 
         Map<String, Object> docData = new HashMap<>();
@@ -294,6 +295,7 @@ public class DharmDealListingActivity extends AppCompatActivity implements View.
         docData.put("cartoon", reqCartoon);
         docData.put("deal_amount", dealAmt);
         docData.put("status", "pending");
+        docData.put("product_name", name+"");
 
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
