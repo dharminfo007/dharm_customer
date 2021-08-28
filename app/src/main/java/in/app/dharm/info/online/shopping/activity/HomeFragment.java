@@ -1,8 +1,6 @@
 package in.app.dharm.info.online.shopping.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,19 +15,25 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,7 +42,6 @@ import java.util.List;
 import in.app.dharm.info.online.shopping.R;
 import in.app.dharm.info.online.shopping.adapter.SlidingImageAdapter;
 import in.app.dharm.info.online.shopping.common.AutoScrollViewPager;
-import in.app.dharm.info.online.shopping.common.DataProcessor;
 import in.app.dharm.info.online.shopping.model.BannerListPojo;
 import in.app.dharm.info.online.shopping.model.ProductListPojo;
 
@@ -50,7 +53,6 @@ import in.app.dharm.info.online.shopping.model.ProductListPojo;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -65,14 +67,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     AutoScrollViewPager viewPager;
     ArrayList<BannerListPojo> bannerArrayList = new ArrayList<>();
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 5000;
-    DataProcessor dataProcessor;
     FirebaseFirestore db;
     public String TAG = "HomeFragment";
     List<ProductListPojo> productArrayList = new ArrayList<>();
-    ArrayList<String> images = new ArrayList<>();
     ExtendedFloatingActionButton floatingButtonToDeal;
     NestedScrollView nestedScrollView;
-
+    LinearLayout llServiceProvider;
+    private StorageReference storageReference;
+    private DatabaseReference mDatabase;
+    Uri videoURI;
+    ImageView imgSale;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -114,35 +118,60 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         db = FirebaseFirestore.getInstance();
 
         llProducts = mView.findViewById(R.id.llProducts);
+        llServiceProvider = mView.findViewById(R.id.llServiceProvider);
         txtProductCount = mView.findViewById(R.id.txtProductCount);
         videoOnLaunch = mView.findViewById(R.id.videoOnLaunch);
         llContactUs = mView.findViewById(R.id.llContactUs);
         viewPager = mView.findViewById(R.id.view_pager);
         floatingButtonToDeal = mView.findViewById(R.id.floatingButtonToDeal);
         nestedScrollView = mView.findViewById(R.id.nestedScrollView);
-//        floatingButtonToDeal.shrink();
+        imgSale = mView.findViewById(R.id.imgSale);
+
         viewPager.setAdapter(new SlidingImageAdapter(getActivity(),
                 bannerArrayList));
 
-//        viewPager.setAdapter(autoScrollPagerAdapter);
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+//        mDatabase = FirebaseDatabase.getInstance().getReference("gs://dharm-fe376.appspot.com/Files/offer_video.mp4");
+
         TabLayout tabs = mView.findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        // start auto scroll
         viewPager.startAutoScroll();
-        // set auto scroll time in mili
         viewPager.setInterval(AUTO_SCROLL_THRESHOLD_IN_MILLI);
-        // enable recycling using true
         viewPager.setCycle(true);
 
         llProducts.setOnClickListener(this);
-//        txtLogin.setOnClickListener(this);
-//        imgWallet.setOnClickListener(this);
         llContactUs.setOnClickListener(this);
+        llServiceProvider.setOnClickListener(this);
         floatingButtonToDeal.setOnClickListener(this);
         initProductDataAvailability();
         initBannerDataAvailability();
         nestedWithFloatingButton();
+        getSaleProductImage();
         return mView;
+    }
+
+    private void getSaleProductImage() {
+        db.collection("onsaleproduct")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getString("sale_img"));
+                                Glide
+                                        .with(getActivity())
+                                        .load(document.getString("sale_img"))
+                                        .placeholder(R.drawable.image_sale_p)
+                                        .dontAnimate()
+                                        .into(imgSale);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     private void nestedWithFloatingButton() {
@@ -175,26 +204,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void createVideoThumbnail() {
-        Uri videoURI = Uri.parse("android.resource://" + getActivity().getPackageName() + "/raw/grab_the_best_offer_now");
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(getActivity().getApplicationContext(), videoURI);
-        Bitmap thumb = retriever.getFrameAtTime(10, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
-//        videoOnLaunch.setBackground(new BitmapDrawable(getResources(), thumb));
-        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.grab_the_best_offer_now);
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
-//videoview.setLayoutParams(new FrameLayout.LayoutParams(550,550));
-        videoOnLaunch.setLayoutParams(new LinearLayout.LayoutParams(width, height));
-        videoOnLaunch.setVideoURI(uri);
-        videoOnLaunch.start();
 
-        videoOnLaunch.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        storageReference.child("Files/offer_video.mp4")
+                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
+            public void onSuccess(Uri uri) {
+                Log.d(TAG, uri + "");
+                videoURI = uri;
+                Display display = getActivity().getWindowManager().getDefaultDisplay();
+                int width = display.getWidth();
+                int height = display.getHeight();
+                videoOnLaunch.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+                videoOnLaunch.setVideoURI(videoURI);
+                videoOnLaunch.start();
+
+                videoOnLaunch.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.setLooping(true);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                Log.d(TAG, exception.getMessage() + "");
             }
         });
+
     }
 
     @Override
@@ -204,7 +242,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.llProducts:
                 Intent intentProducts = new Intent(getActivity(), ProductListingActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("productList", (Serializable)productArrayList);
+                bundle.putSerializable("productList", (Serializable) productArrayList);
                 intentProducts.putExtra("BUNDLE", bundle);
                 startActivity(intentProducts);
                 break;
@@ -217,9 +255,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 goToDealPageListing();
                 break;
 
+            case R.id.llServiceProvider:
+                openServiceProvider();
+                break;
+
             default:
                 break;
         }
+    }
+
+    private void openServiceProvider() {
+        startActivity(new Intent(getActivity(), ServiceProviderActivity.class));
     }
 
     private void goToDealPageListing() {
@@ -236,16 +282,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             productArrayList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-//                                ProductListPojo productListModel = document.toObject(ProductListPojo.class);
-//                                for(String image : productListModel.getListProductImages()){
-//                                    images.add(image);
-//                                }
                                 ProductListPojo productListPojo = new ProductListPojo(document.getString("name"),
                                         document.getString("description"), document.getString("pieces per cartoon"),
                                         String.valueOf(document.getString("stock")),
                                         document.getString("price"), document.getString("in_date"),
                                         document.getString("type"), document.getString("id"), (ArrayList<String>) document.get("images"));
-//                                , images);
                                 productArrayList.add(productListPojo);
                             }
                             Log.d(TAG, " => " + productArrayList.size());

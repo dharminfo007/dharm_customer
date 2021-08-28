@@ -53,13 +53,6 @@ public class OfferListAdapter extends RecyclerView.Adapter<OfferListAdapter.Cont
         holder.tvTitle.setText(couponListPojo.getCoupon_title());
         holder.tvDesc.setText(couponListPojo.getCoupon_desc());
         holder.tvApplyOffer.setText("Apply");
-        // Set the data to the views here
-//        holder.setProductTitle(contact.getTvTitle());
-//        holder.setProductDesc(contact.getTvDesc());
-//        holder.setProductCartoon(contact.getTvCartoon());
-//        holder.setProductStock(contact.getTvStock());
-//        holder.setProductPrice(contact.getTvPrice());
-//        holder.setProductOfferDisc(contact.getTvOfferDisc());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

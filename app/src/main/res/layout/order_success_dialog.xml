@@ -76,7 +76,8 @@
             android:gravity="center"
             android:layout_marginVertical="5dp"
             android:layout_centerHorizontal="true"
-            android:text="@string/txt_order_payment_mode" />
+            android:text="@string/txt_order_payment_mode"
+            android:visibility="gone"/>
 
         <TextView
             android:layout_below="@+id/tvOrderPaymentModeTitle"
@@ -90,7 +91,8 @@
             android:gravity="center"
             android:layout_centerHorizontal="true"
             android:lines="2"
-            android:text="@string/txt_order_payment_cod" />
+            android:text="@string/txt_order_payment_cod"
+            android:visibility="gone"/>
 
 
         <com.google.android.material.textview.MaterialTextView

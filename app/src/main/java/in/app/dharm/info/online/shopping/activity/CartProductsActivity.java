@@ -51,7 +51,7 @@ public class CartProductsActivity extends AppCompatActivity implements View.OnCl
     DatabaseReference databaseReference;
     FirebaseFirestore db;
     public String TAG = "CartProductsActivity";
-    long orderSize = 0;
+    long orderSize ;
     ProgressDialog pd;
     LinearLayout llBottom;
 

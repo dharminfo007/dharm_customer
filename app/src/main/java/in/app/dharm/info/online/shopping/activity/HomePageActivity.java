@@ -176,66 +176,6 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             commit();*/
     }
 
-
-    private void initProductDataAvailability() {
-        db.collection("productlist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            productArrayList = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                                ProductListPojo productListModel = document.toObject(ProductListPojo.class);
-//                                for(String image : productListModel.getListProductImages()){
-//                                    images.add(image);
-//                                }
-                                ProductListPojo productListPojo = new ProductListPojo(document.getString("name"),
-                                        document.getString("description"), document.getString("pieces per cartoon"),
-                                        String.valueOf(document.getString("stock")),
-                                        document.getString("price"), document.getString("in_date"),
-                                        document.getString("type"), document.getString("id"), (ArrayList<String>) document.get("images"));
-//                                , images);
-                                productArrayList.add(productListPojo);
-                            }
-                            Log.d(TAG, " => " + productArrayList.size());
-                            if (productArrayList.size() > 0) {
-                                txtProductCount.setText(productArrayList.size() + "");
-                            } else {
-                                txtProductCount.setText("Not available");
-                            }
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
-
-    private void initBannerDataAvailability() {
-        db.collection("bannerlist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            bannerArrayList = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                BannerListPojo bannerListPojo = new BannerListPojo(document.getString("image"));
-                                bannerArrayList.add(bannerListPojo);
-                                viewPager.setAdapter(new SlidingImageAdapter(HomePageActivity.this, bannerArrayList));
-                            }
-                            Log.d(TAG, " => " + bannerArrayList.size());
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
-
     private void checkLoginStatus() {
         if (dataProcessor.getBool("isLogin") == true) {
             txtLogin.setText("ORDER");
@@ -255,15 +195,6 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
-           /* case R.id.llProducts:
-                startActivity(new Intent(HomePageActivity.this, ProductListingActivity.class));
-                break;
-
-            case R.id.llContactUs:
-                startActivity(new Intent(HomePageActivity.this, ContactUsActivity.class));
-                break;
-*/
             case R.id.txtLogin:
                 if (dataProcessor.getBool("isLogin") == true) {
                     startActivity(new Intent(HomePageActivity.this, OrdersListingActivity.class));

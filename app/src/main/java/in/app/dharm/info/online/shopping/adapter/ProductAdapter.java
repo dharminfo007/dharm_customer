@@ -79,6 +79,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ContactH
                     .with(mContext)
                     .load(productList.get(position).getListProductImages().get(0))
                     .centerCrop()
+                    .dontAnimate()
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
                     .into(holder.imgProduct);
         }

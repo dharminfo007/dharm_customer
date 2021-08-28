@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -50,6 +52,7 @@ public class ImageDetailAdapter extends PagerAdapter {
         Glide
                 .with(context)
                 .load(IMAGES.get(position))
+                .dontAnimate()
                 .into(imgBanner);
 
         view.addView(imageLayout, 0);

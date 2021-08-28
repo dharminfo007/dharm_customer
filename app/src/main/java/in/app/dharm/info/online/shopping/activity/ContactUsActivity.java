@@ -99,6 +99,8 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Log.d(TAG, "Feedback successfully written!");
+                        Toast.makeText(ContactUsActivity.this, "Feedback successfully added", Toast.LENGTH_LONG).show();
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

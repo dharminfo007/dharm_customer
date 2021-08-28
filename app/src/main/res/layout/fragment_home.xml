@@ -2,13 +2,12 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
 
-      <androidx.core.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:id="@+id/nestedScrollView">
@@ -46,7 +45,7 @@
                       app:tabGravity="center"
                       app:tabIndicatorHeight="0dp" />
               </FrameLayout>
-          <LinearLayout
+              <LinearLayout
               android:id="@+id/llProduct"
               android:layout_width="fill_parent"
               android:layout_height="250dp"
@@ -65,7 +64,7 @@
 
                   <ImageView
                       android:layout_width="match_parent"
-                      android:layout_height="match_parent"
+                      android:layout_height="200dp"
                       android:layout_centerHorizontal="true"
                       android:scaleType="fitCenter"
                       android:padding="5dp"
@@ -121,9 +120,14 @@
                           <LinearLayout
                               android:layout_width="match_parent"
                               android:layout_height="match_parent"
-                              android:background="@drawable/contact_us_icon"
                               android:gravity="center"
                               android:orientation="vertical">
+                              <ImageView
+                                  android:layout_width="250dp"
+                                  android:layout_height="125dp"
+                                  android:layout_centerHorizontal="true"
+                                  android:scaleType="fitXY"
+                                  android:src="@drawable/contact_us_icon" />
 
                           </LinearLayout>
 
@@ -155,9 +159,14 @@
                               android:id="@+id/llServiceProvider"
                               android:layout_width="match_parent"
                               android:layout_height="match_parent"
-                              android:background="@drawable/services_provider_icon"
                               android:gravity="center"
                               android:orientation="vertical">
+                              <ImageView
+                                  android:layout_width="250dp"
+                                  android:layout_height="125dp"
+                                  android:layout_centerHorizontal="true"
+                                  android:scaleType="fitXY"
+                                  android:src="@drawable/services_provider_icon" />
 
 
                               <TextView
@@ -193,7 +202,6 @@
                       android:layout_height="fill_parent" />
 
               </LinearLayout>
-
               <LinearLayout
                   android:id="@+id/llOnSale"
                   android:layout_width="match_parent"
@@ -203,16 +211,14 @@
                   android:orientation="vertical">
 
                   <ImageView
+                      android:id="@+id/imgSale"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:layout_centerHorizontal="true"
-                      android:scaleType="fitXY"
-                      android:src="@drawable/image_sale_p" />
+                      android:scaleType="fitXY"/>
 
 
               </LinearLayout>
-
-
               <androidx.cardview.widget.CardView
                   android:id="@+id/cardProducts"
                   android:layout_width="match_parent"
